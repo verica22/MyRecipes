@@ -116,14 +116,15 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
         }
 
-        public JsonResult GetIngredients(string term)
-        {
+        //public JsonResult GetIngredient(string term)
+        //{
 
-            List<string> ingredients;
-            ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(term))
-                .Select(e => e.Name).Distinct().ToList();
+        //   // List<string> ingredients;
+        //   var ingredients = _recipeManager.GetIngredient(term);
+        //    //ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(ingredientName))
+        //    //    .Select(e => e.Name).Distinct().ToList();
 
-            return Json(ingredients, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(ingredients, JsonRequestBehavior.AllowGet);
+        //}
     }
 }

@@ -7,7 +7,7 @@
 
         public string RecipeName { get; set; }
         public string IngredientName { get; set; }
-        public string IngredientMeasurement { get; set; }
+        public string Measurement { get; set; }
 
         public int Quantity { get; set; }
     }

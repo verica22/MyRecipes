@@ -14,5 +14,6 @@ namespace ItLabs.MyRecipes.Domain
         void Update(Recipe recipe);
 
         IEnumerable<Ingredient> GetIngredients();
+        Ingredient GetIngredient(string name);
     }
 }

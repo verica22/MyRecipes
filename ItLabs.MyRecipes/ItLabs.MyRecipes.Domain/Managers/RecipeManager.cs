@@ -4,6 +4,7 @@ using AutoMapper;
 using System.Linq;
 using ItLabs.MyRecipes.Domain.Validations;
 using ItLabs.MyRecipes.Domain.Responses;
+using System;
 
 namespace ItLabs.MyRecipes.Domain.Managers
 {
@@ -41,6 +42,8 @@ namespace ItLabs.MyRecipes.Domain.Managers
 
         public ResponseBase SaveRecipe(Recipe recipe)
         {
+          //recipe.Id = 113;
+
             var response = new ResponseBase();
 
             var validator = new RecipeValidator();
@@ -54,7 +57,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
             }
 
             Data.Recipe dataRecipe;
-            recipe.Id = 113;
+           
             if (recipe.Id == 0)
             {
                 dataRecipe = new Data.Recipe
@@ -68,7 +71,12 @@ namespace ItLabs.MyRecipes.Domain.Managers
             else
             {
                 dataRecipe = _recipeRepository.GetRecipe(recipe.Id);
-                dataRecipe = Mapper.Map<Data.Recipe>(recipe);
+               // dataRecipe = Mapper.Map<Data.Recipe>(recipe);
+                dataRecipe.Name = recipe.Name;
+                dataRecipe.Description = recipe.Description;
+                dataRecipe.IsDone = recipe.IsDone;
+                dataRecipe.IsFavorite = recipe.IsFavorite;
+                
             }
 
             foreach (var recipeIngredient in recipe.RecipeIngredients)
@@ -79,7 +87,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
                     dataIngredient = new Data.Ingredient()
                     {
                         Name = recipeIngredient.IngredientName,
-                        Measurement = recipeIngredient.IngredientMeasurement
+                        Measurement = recipeIngredient.Measurement
                     };
                 }
 
@@ -157,8 +165,16 @@ namespace ItLabs.MyRecipes.Domain.Managers
 
         public IEnumerable<Ingredient> GetIngredients()
         {
+           
             var dbIngredients = _recipeRepository.GetIngredients();
             var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
+            return ingredients;
+        }
+
+        public Ingredient GetIngredient(string name)
+        {
+            var dbIngredients = _recipeRepository.GetIngredients();
+            var ingredients = Mapper.Map<Ingredient>(dbIngredients);
             return ingredients;
         }
     }
