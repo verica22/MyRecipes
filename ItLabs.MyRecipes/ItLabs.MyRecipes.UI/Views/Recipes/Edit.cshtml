@@ -1,0 +1,142 @@
+﻿@model ItLabs.MyRecipes.Domain.Recipe
+@using ItLabs.MyRecipes.Domain.Enums
+@{ Layout = null; }
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+         @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", id = "recipeName" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", id = "description" } })*@
+                @*<label for="comment">Description:</label>*@
+                <p>
+                    <textarea cols="50" htmlattributes="{ class = form-control }" id="description" name="Description" rows="8" style="margin: 0px; width: 286px; height: 98px;">@Html.DisplayFor(model => model.Description)</textarea>
+                </p>
+
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Done, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.Done, new { id = "doneRecipe" })
+                        @Html.ValidationMessageFor(model => model.Done, "", new { @class = "text-danger" })
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Favorites, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    <label>
+                        @Html.EditorFor(model => model.Favorites, new { id = "favouriteRecipe" })
+                        @Html.ValidationMessageFor(model => model.Favorites, "", new { @class = "text-danger" })
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h4><b>Ingredients</b></h4>
+            <hr />
+            <div class="container col-sm-4">
+                <div class="form-group">
+                    @using (Html.BeginForm())
+                {
+                        <label for="Iname">Name:</label>
+                        @*@Html.TextBox("term", null, new { id = "ingredientsName" })*@
+                        <input type="text" class="form-control" id="ingredientsName">
+
+                    }
+
+                </div>
+            </div>
+            <div class="container col-sm-3">
+                <div class="container">
+                    <label for="quantity">Quantity:</label>
+                    <input type="text" class="form-control" id="quantity">
+                    @*<span class="error">Valid quantity required</span>*@
+                </div>
+            </div>
+            <div class="container col-sm-4">
+                <label for="quantity">Measurement:</label>
+                @Html.DropDownList("IngredientsMeasurements",
+        EnumHelper.GetSelectList(typeof(IngredientsMeasurements)), "Select Measurment",
+      new { @class = "form-control", @id = "measurementId" })
+
+
+
+            </div>
+
+            <div class="container col-sm-1">
+                <br>
+
+                <input type="button" id="add" class="btn btn-default" value="Add" />
+
+
+            </div>
+        </div>
+        <div class="col-sm-12 tablecontainer" id="orderItems">
+            <br>
+            @if (Model.RecipeIngredients != null)
+                {
+                    if (Model.RecipeIngredients.Any())
+                    {
+                        foreach (var item in Model.RecipeIngredients)
+                        {
+                        <span>@item.IngredientName - </span>
+                        <span>@item.Quantity </span>
+                        <span>@item.IngredientMeasurement</span>
+                        <br />
+                    }
+                }
+            }
+
+
+        </div>
+        <div class="container text-right col-sm-12">
+
+            <input type="button" id="submit" class="btn btn-default" value="Save" />
+            @* <input type="submit" value="Cancel" class="btn btn-default" />*@
+        </div>
+        <br />
+    </div>
+
+}
+
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        $("#ingredientsName").autocomplete({
+            source: '@Url.Action("GetIngredients")'
+        });
+    });
+</script>
+@Scripts.Render("~/Scripts/MyScripts/RecipesSave.js")

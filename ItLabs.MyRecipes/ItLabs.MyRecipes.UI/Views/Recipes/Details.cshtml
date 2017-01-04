@@ -1,0 +1,81 @@
+﻿@model ItLabs.MyRecipes.Domain.Recipe
+
+@{ Layout = null; }
+
+<div>
+    
+
+    <div class="form-horizontal">
+        <h4 id="details">Details for @Html.DisplayFor(model => model.Name) </h4>
+        <hr />
+      
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Name)
+             </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Description)
+             </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Done, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.DisplayFor(model => model.Done)
+                 </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Favorites, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.DisplayFor(model => model.Favorites)
+                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                <b> Ingredients</b>
+            </div>
+            <div class="col-md-10">
+                @if (Model.RecipeIngredients != null)
+                {
+                    if (Model.RecipeIngredients.Any())
+                    {
+                        foreach (var item in Model.RecipeIngredients)
+                        {
+                            <span>@item.IngredientName - </span>
+                            <span>@item.Quantity </span>
+                            //Enum.GetName(typeof(IngredientsMeasurements), value);
+                            <span>@item.IngredientMeasurement</span>
+                                <br />
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container text-right">
+    <p>
+       
+            @*<a data-edit-id="@Model.Id" data-edit-href="@Url.Action("Edit", new { id = Model.Id })">Edit</a>*@
+       
+        @*<label>
+            <a data-details-id="@Model.Id" data-details-href="@Url.Action("Edit", new { id = Model.Id })">@Html.DisplayFor(modelItem => Model.Name)</a>
+        </label>*@
+        @*<button type="button" class="btn btn-default"> @Html.ActionLink("Edit", "Edit", new { id = Model.Id })</button>*@
+
+        @Html.ActionLink("Cancel", "Index")
+    </p>
+</div>
+

@@ -1,0 +1,77 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+#Navigation {
+      margin-left: 70px;
+      font-family:"Comic Sans MS";
+      color:#A52A2A;
+      border-collapse: collapse;
+      font-size: 18px;
+      border-color:#A52A2A;
+      
+}
+h3{
+      font-family:"Comic Sans MS";
+      color:#A52A2A;
+      font-size: 30px;
+  }
+th{
+    color:#A52A2A;
+   
+}
+#checkBox {
+    width:30px;
+}
+#name{
+     width:20%;
+}
+.table {
+     /*width:40%;*/
+}
+dl{
+    /*width:40%;*/
+}
+#detailsTitle{
+     margin-left:180px;
+      color:#A52A2A;
+}
+
+   hr.vertical
+{
+   width: 0px;
+   height: 100%; 
+} 
+#hederNav{
+     color:#A52A2A;
+}
+.error{
+     color:#A52A2A;
+}
+.descriptionEdit{
+ height: 350px; 
+}
+a:hover{ 
+ cursor:pointer
+
+}

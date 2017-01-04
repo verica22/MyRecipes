@@ -1,0 +1,15 @@
+﻿<div>
+    @if (Model.RecipeIngredients != null)
+    {
+        if (Model.RecipeIngredients.Any())
+        {
+            foreach (var item in Model.RecipeIngredients)
+            {
+                <span>@item.IngredientName - </span>
+                <span>@item.Quantity </span>
+                <span>@item.IngredientMeasurement</span>
+                <br />
+            }
+        }
+    }
+</div>
