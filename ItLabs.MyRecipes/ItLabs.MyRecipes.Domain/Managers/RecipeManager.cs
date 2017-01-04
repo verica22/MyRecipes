@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using ItLabs.MyRecipes.Data.Repository;
 using AutoMapper;
-using System;
 using System.Linq;
-using ItLabs.MyRecipes.Data;
+using ItLabs.MyRecipes.Domain.Validations;
+using ItLabs.MyRecipes.Domain.Responses;
 
 namespace ItLabs.MyRecipes.Domain.Managers
 {
+    //todo
     public class RecipeManager : IRecipeManager
     {
         public IRecipeRepository _recipeRepository { get; set; }
@@ -23,84 +24,142 @@ namespace ItLabs.MyRecipes.Domain.Managers
             return recipes;
         }
 
-        public void Save(Recipe recipe)
+        public Recipe Get(int Id)
         {
-            recipe.Id = 113;
-            var existingRecipe = _recipeRepository.GetRecipes().SingleOrDefault(x => x.Id == recipe.Id);
-            var newRecipe = (dynamic)null;
-            if (existingRecipe == null)
-            {
-               newRecipe = new Data.Recipe { Name = recipe.Name, Description = recipe.Description, Done = recipe.Done, Favorites = recipe.Favorites };
-                //add ingredients
-                foreach (var i in recipe.RecipeIngredients.ToList())
-                {
-                    var existingIngredient = _recipeRepository.GetIngredients().SingleOrDefault(x => x.Name.ToLower() == i.IngredientName.ToLower());
-                    //if ingredient exist
-                    if (existingIngredient != null)
-                    {
-                        newRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Recipe = newRecipe, Ingredient = existingIngredient, Quantity = i.Quantity });
-                    }
-                    //if ingredient doesnt exist
-                    else
-                    {
-                        var newIngredient = new Data.Ingredient() { Name = i.IngredientName, Measurement = i.IngredientMeasurement };
-                        newRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Recipe = newRecipe, Ingredient = newIngredient, Quantity = i.Quantity });
+            var dbRecipe = _recipeRepository.GetRecipe(Id);
+            var recipe = Mapper.Map<Recipe>(dbRecipe);
+            return recipe;
+        }
 
-                    }
-                }
+        //see repository comments
+        public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite)
+        {
+            var dbRecipes = _recipeRepository.Search(name, isDone, isFavourite);
+            var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
+            return recipes;
+        }
+
+        public ResponseBase SaveRecipe(Recipe recipe)
+        {
+            var response = new ResponseBase();
+
+            var validator = new RecipeValidator();
+            var validationResult = validator.Validate(recipe);
+
+            if (!validationResult.IsValid)
+            {
+                response.IsSuccessful = false;
+                response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return response;
+            }
+
+            Data.Recipe dataRecipe;
+            recipe.Id = 113;
+            if (recipe.Id == 0)
+            {
+                dataRecipe = new Data.Recipe
+                {
+                    Name = recipe.Name,
+                    Description = recipe.Description,
+                    IsDone = recipe.IsDone,
+                    IsFavorite = recipe.IsFavorite
+                };
             }
             else
             {
-                existingRecipe.Name = recipe.Name;existingRecipe.Description = recipe.Description; existingRecipe.Done = recipe.Done; existingRecipe.Favorites = recipe.Favorites;
-                //add ingredients
-                foreach (var i in recipe.RecipeIngredients.ToList())
-                {
-                    var existingIngredient = _recipeRepository.GetIngredients().SingleOrDefault(x => x.Name.ToLower() == i.IngredientName.ToLower());
-                    //if ingredient exist
-                    if (existingIngredient != null)
-                    {
-                        existingRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Ingredient = existingIngredient, Quantity = i.Quantity });
-                    }
-                    //if ingredient doesnt exist
-                    else
-                    {
-                        var newIngredient = new Data.Ingredient() { Name = i.IngredientName, Measurement = i.IngredientMeasurement };
-                        existingRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Ingredient = newIngredient, Quantity = i.Quantity });
-                    }
-                }
+                dataRecipe = _recipeRepository.GetRecipe(recipe.Id);
+                dataRecipe = Mapper.Map<Data.Recipe>(recipe);
             }
-            var dbRecipe = Mapper.Map<Data.Recipe>(existingRecipe);
-            _recipeRepository.Save(existingRecipe);
 
+            foreach (var recipeIngredient in recipe.RecipeIngredients)
+            {
+                var dataIngredient = _recipeRepository.GetIngredient(recipeIngredient.IngredientName);
+                if (dataIngredient == null)
+                {
+                    dataIngredient = new Data.Ingredient()
+                    {
+                        Name = recipeIngredient.IngredientName,
+                        Measurement = recipeIngredient.IngredientMeasurement
+                    };
+                }
+
+                dataRecipe.RecipeIngredients.Add(new Data.RecipeIngredients
+                {
+                    Recipe = recipe.Id == 0 ? dataRecipe : null,
+                    Ingredient = dataIngredient,
+                    Quantity = recipeIngredient.Quantity
+                });
+            }
+
+            //var existingRecipe = _recipeRepository.GetRecipes().SingleOrDefault(x => x.Id == recipe.Id);
+            //var newRecipe = (dynamic)null;
+            //if (existingRecipe == null)
+            //{
+            //    newRecipe = new Data.Recipe { Name = recipe.Name, Description = recipe.Description, IsDone = recipe.IsDone, IsFavorite = recipe.IsFavorite };
+            //    //add ingredients
+            //    foreach (var i in recipe.RecipeIngredients.ToList())
+            //    {
+            //        var existingIngredient = _recipeRepository.GetIngredients().SingleOrDefault(x => x.Name.ToLower() == i.IngredientName.ToLower());
+            //        //if ingredient exist
+            //        if (existingIngredient != null)
+            //        {
+            //            newRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Recipe = newRecipe, Ingredient = existingIngredient, Quantity = i.Quantity });
+            //        }
+            //        //if ingredient doesnt exist
+            //        else
+            //        {
+            //            var newIngredient = new Data.Ingredient() { Name = i.IngredientName, Measurement = i.IngredientMeasurement };
+            //            newRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Recipe = newRecipe, Ingredient = newIngredient, Quantity = i.Quantity });
+
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    existingRecipe.Name = recipe.Name; existingRecipe.Description = recipe.Description; existingRecipe.IsDone = recipe.IsDone; existingRecipe.IsFavorite = recipe.IsFavorite;
+            //    //add ingredients
+            //    foreach (var i in recipe.RecipeIngredients.ToList())
+            //    {
+            //        var existingIngredient = _recipeRepository.GetIngredients().SingleOrDefault(x => x.Name.ToLower() == i.IngredientName.ToLower());
+            //        //if ingredient exist
+            //        if (existingIngredient != null)
+            //        {
+            //            existingRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Ingredient = existingIngredient, Quantity = i.Quantity });
+            //        }
+            //        //if ingredient doesnt exist
+            //        else
+            //        {
+            //            var newIngredient = new Data.Ingredient() { Name = i.IngredientName, Measurement = i.IngredientMeasurement };
+            //            existingRecipe.RecipeIngredients.Add(new Data.RecipeIngredients { Ingredient = newIngredient, Quantity = i.Quantity });
+            //        }
+            //    }
+            //}
+
+            _recipeRepository.Save(dataRecipe);
+            return response;
         }
 
-        public void Remove(int Id)
+
+        public void Remove(int id)
         {
-            _recipeRepository.Remove(Id);
+            if (id == 0)
+                return;
+
+            _recipeRepository.Remove(id);
         }
-        public void Edit(Recipe recipe)
+
+
+        public void Update(Recipe recipe)
         {
             var dbRecipe = Mapper.Map<Data.Recipe>(recipe);
-            _recipeRepository.Edit(dbRecipe);
-        }
-        public Recipe FindById(int Id)
-        {
-            var result = _recipeRepository.FindById(Id);
-            return Mapper.Map<Recipe>(result);
+            _recipeRepository.Update(dbRecipe);
         }
 
         public IEnumerable<Ingredient> GetIngredients()
         {
             var dbIngredients = _recipeRepository.GetIngredients();
-            var ingredient = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
-            return ingredient;
+            var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
+            return ingredients;
         }
-        public IEnumerable<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite)
-        {
-            var searchRecipe = _recipeRepository.SearchRecipes(name, isDone, isFavourite);
-            var recipe = Mapper.Map<IEnumerable<Recipe>>(searchRecipe);
-            return recipe;
-        }
-
     }
 }

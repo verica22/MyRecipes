@@ -34,24 +34,24 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Done, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsDone, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
                     <label>
-                        @Html.EditorFor(model => model.Done, new { id = "doneRecipe" })
-                        @Html.ValidationMessageFor(model => model.Done, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.IsDone, new { id = "doneRecipe" })
+                        @Html.ValidationMessageFor(model => model.IsDone, "", new { @class = "text-danger" })
                     </label>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Favorites, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsFavorite, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
                     <label>
-                        @Html.EditorFor(model => model.Favorites, new { id = "favouriteRecipe" })
-                        @Html.ValidationMessageFor(model => model.Favorites, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.IsFavorite, new { id = "favouriteRecipe" })
+                        @Html.ValidationMessageFor(model => model.IsFavorite, "", new { @class = "text-danger" })
                     </label>
                 </div>
             </div>

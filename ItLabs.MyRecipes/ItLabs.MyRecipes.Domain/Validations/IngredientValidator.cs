@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
 
-
+//todo
+//add notnull check
 namespace ItLabs.MyRecipes.Domain.Validations
 {
-    class FluentIngredientValidator : AbstractValidator<Ingredient>
+    class IngredientValidator : AbstractValidator<Ingredient>
     {
-        public FluentIngredientValidator()
+        public IngredientValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Ingredient Name is required");
+            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Ingredient Name is required");
             RuleFor(x => x.Measurement).NotEmpty().WithMessage("Measurement is required");
-
         }
     }
 }

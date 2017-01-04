@@ -27,6 +27,5 @@ namespace ItLabs.MyRecipes.Domain.DependencyInjection
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
-
     }
 }

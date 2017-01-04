@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
+    //todo add new Ingredients repository
+    //do we need Update? Use Save
    public interface IRecipeRepository
     {
-        void Save(Recipe recipe);
-        void Remove(int Id);
-        void Edit(Recipe recipe);
         IEnumerable<Recipe> GetRecipes();
+        Recipe GetRecipe(int id);
+        IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite);
 
-        IEnumerable<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite);
+        void Save(Recipe recipe);
+        void Update(Recipe recipe);
+        void Remove(int id);
+
         IEnumerable<Ingredient> GetIngredients();
-        Recipe FindById(int Id);
+        Ingredient GetIngredient(string name);
 
-
-       // void UniqueRecipeName(string name);
     }
 }

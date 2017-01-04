@@ -26,7 +26,7 @@
             orderItems.push({
                 IngredientName: $('#ingredientsName').val().trim(),
                 Quantity: parseInt($('#quantity').val().trim()),
-                IngredientMeasurement: $('#measurementId').val().trim(),
+                Measurement: $('#measurementId').val().trim(),
             });
             //Clear fields
             $('#ingredientsName').val('').focus();

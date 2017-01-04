@@ -1,102 +1,111 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+//todo
+//for include purposes
+using System.Data.Entity;
 using System.Linq;
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
     public class RecipeRepository : IRecipeRepository
     {
-        RecipeDBContext db = new RecipeDBContext();
-        public Recipe FindById(int Id)
+        private readonly RecipeDBContext _dbContext;
+
+        public RecipeRepository()
         {
-            var result = (from recipe in db.Recipes where recipe.Id == Id select recipe).FirstOrDefault();
-            return result;
+            _dbContext = new RecipeDBContext();
         }
 
         public IEnumerable<Recipe> GetRecipes()
         {
-            return db.Recipes.ToList();
-        }
-        public IEnumerable<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite)
-        {
-            if (name == "")
-            {
-                var recipes = db.Recipes.Where(r =>
-                    (!isDone || r.Done) &&
-                    (!isFavourite || r.Favorites));
-                return recipes.ToList();
-            }
-            else
-            {
-                var recipes = db.Recipes.Where(r =>
-                    (!isDone || r.Done) &&
-                    (!isFavourite || r.Favorites) &&
-                    r.Name.ToLower().Contains(name.ToLower()));
-                return recipes.ToList();
-            }
-           
-        }
-        public void Remove(int Id)
-        {
-            Recipe recipe = db.Recipes.Find(Id);
-            db.Recipes.Remove(recipe);
-            db.SaveChanges();
+            return _dbContext.Recipes.ToList();
         }
 
+        public Recipe GetRecipe(int id)
+        {
+            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Id == id);
+            return recipe;
+        }
+
+        //add new class/request for this containing pageIndex, pageSize and filter below
+        //out parameter total
+        public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite)
+        {
+            var recipes = _dbContext.Recipes.AsQueryable();
+
+            //add total
+            //total = recipes.Count();
+
+            if (!string.IsNullOrEmpty(name))
+                recipes = recipes.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
+
+            if (isDone)
+                recipes = recipes.Where(x => x.IsDone);
+
+            if (isFavourite)
+                recipes = recipes.Where(x => x.IsFavorite);
+            
+            //add paging - skip take etc
+
+            return recipes.ToList();
+        }
 
         public void Save(Recipe recipe)
         {
-            
+            if (recipe == null)
+                return;
+
             if (recipe.Id == 0)
             {
-               
-                db.Recipes.Add(recipe);
-               
+                _dbContext.Recipes.Add(recipe);
             }
             else
             {
-                db.Entry(recipe).State = System.Data.Entity.EntityState.Modified;
-               
+                _dbContext.Entry(recipe).State = EntityState.Modified;
             }
-            db.SaveChanges();
 
-           
+            _dbContext.SaveChanges();
         }
 
-        public void Edit(Recipe recipe)
+        public void Update(Recipe recipe)
         {
+            if (recipe == null)
+                return;
 
-            db.Entry(recipe).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            _dbContext.Entry(recipe).State = EntityState.Modified;
+            _dbContext.SaveChanges();
         }
-        public bool UniqueRecipeName(string name)
+
+        public void Remove(int id)
         {
-           
-            var recipe = db.Recipes.Where(x => x.Name.ToLower() == name.ToLower()).SingleOrDefault();
+            if (id == 0)
+                return;
 
-            if (recipe == null) return true;
-            return false;
+            var recipe = GetRecipe(id);
+
+            if (recipe == null)
+                return;
+
+            _dbContext.Recipes.Remove(recipe);
+            _dbContext.SaveChanges();
         }
 
+        //for this you will need the id (if 0 its new, work on the condition for update and creatae)
+        public bool IsRecipeNameUnique(string name)
+        {
+            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
+
+            return (recipe == null);
+        }
 
         public IEnumerable<Ingredient> GetIngredients()
         {
-            return db.Ingredients.ToList();
+            return _dbContext.Ingredients.ToList();
         }
 
-       
-
-
-        //public GetIngredients(string term)
-        //{
-
-        //    List<string> ingredients;
-        //    ingredients = db.Ingredients.Where(x => x.Name.StartsWith(term))
-        //        .Select(e => e.Name).Distinct().ToList();
-
-        //    return ingredients;
-        //}
-
+        public Ingredient GetIngredient(string name)
+        {
+            var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
+            return ingredient;
+        }
     }
-
 }

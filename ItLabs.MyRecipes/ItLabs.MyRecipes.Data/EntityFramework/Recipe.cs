@@ -7,7 +7,7 @@ namespace ItLabs.MyRecipes.Data
     {
         public Recipe()
         {
-            this.RecipeIngredients = new HashSet<RecipeIngredients>();
+            RecipeIngredients = new List<RecipeIngredients>();
         }
 
         [Key]
@@ -16,8 +16,8 @@ namespace ItLabs.MyRecipes.Data
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool Done { get; set; }
-        public bool Favorites { get; set; }
+        public bool IsDone { get; set; }
+        public bool IsFavorite { get; set; }
 
         public virtual ICollection<RecipeIngredients> RecipeIngredients { get; set; }
     }

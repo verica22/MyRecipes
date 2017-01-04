@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace ItLabs.MyRecipes.Domain.Enums
+﻿namespace ItLabs.MyRecipes.Domain.Enums
 {
- 
+    //todo
+    //rename to Measurement
     public enum IngredientsMeasurements
     {
         Spoon = 1,
@@ -17,7 +13,5 @@ namespace ItLabs.MyRecipes.Domain.Enums
         Kg = 7,
         ML = 8,
         Number = 9
-
     }
-    //public IngredientsMeasurements Measurements { get; set; }
 }

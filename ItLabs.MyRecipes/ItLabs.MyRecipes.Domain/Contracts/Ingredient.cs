@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ItLabs.MyRecipes.Domain.Enums;
+using System.Collections.Generic;
 
 namespace ItLabs.MyRecipes.Domain
 {
@@ -6,13 +7,13 @@ namespace ItLabs.MyRecipes.Domain
     {
         public Ingredient()
         {
-            RecipeIngredients = new List<RecipeIngredients>();
+            RecipeIngredients = new List<RecipeIngredient>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Measurement { get; set; }
+        public IngredientsMeasurements Measurement { get; set; }
 
-        public virtual List<RecipeIngredients> RecipeIngredients { get; set; }
+        public virtual IEnumerable<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }
