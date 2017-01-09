@@ -2,7 +2,7 @@
 {
     //todo
     //rename to Measurement
-    public enum IngredientsMeasurements
+    public enum Measurements
     {
         Spoon = 1,
         Teaspoon = 2,

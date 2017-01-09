@@ -12,7 +12,7 @@ namespace ItLabs.MyRecipes.Domain
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public IngredientsMeasurements Measurement { get; set; }
+        public Measurements Measurement { get; set; }
 
         public virtual IEnumerable<RecipeIngredient> RecipeIngredients { get; set; }
     }

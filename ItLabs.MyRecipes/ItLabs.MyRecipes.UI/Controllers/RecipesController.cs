@@ -12,7 +12,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
     public class RecipesController : Controller
     {
 
-        public const int pageSize = 8;
+       // public const int pageSize = 8;
 
         public IRecipeManager _recipeManager { get; set; }
 
@@ -20,18 +20,19 @@ namespace ItLabs.MyRecipes.UI.Controllers
         {
             _recipeManager = recipeManager;
         }
-
+        
         public ActionResult Index(int? page)
         {
 
-            int pageNumber = (page ?? 1);
+           int pageNumber = (page ?? 1);
 
-            return View(_recipeManager.GetRecipes().ToPagedList(pageNumber, pageSize));
+           // return View(_recipeManager.GetRecipes().ToPagedList(pageNumber, pageSize));
+            return View(_recipeManager.GetRecipes().ToList());
         }
         [HttpPost]
-        public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
+        public ActionResult Search(string name, bool isDone, bool isFavourite)
         {
-            int pageNumber = (page ?? 1);
+            //int pageNumber = (page ?? 1);
             var recipes = _recipeManager.Search(name, isDone, isFavourite);
             
             return View(recipes);
@@ -96,35 +97,17 @@ namespace ItLabs.MyRecipes.UI.Controllers
                 return HttpNotFound();
             return View(recipe);
         }
-        //POST: Edit
-        [HttpPost]
-        public ActionResult Edit(Recipe recipe)
+
+
+        public JsonResult GetIngredient(string term)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _recipeManager.Update(recipe);
-                    return RedirectToAction("Index");
-                }
-                return View(recipe);
-            }
-            catch
-            {
-                return View();
-            }
 
+             List<string> ingredients;
+           // var ingredients = _recipeManager.GetIngredient(term);
+            ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(term))
+            .Select(e => e.Name).Distinct().ToList();
+
+            return Json(ingredients, JsonRequestBehavior.AllowGet);
         }
-
-        //public JsonResult GetIngredient(string term)
-        //{
-
-        //   // List<string> ingredients;
-        //   var ingredients = _recipeManager.GetIngredient(term);
-        //    //ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(ingredientName))
-        //    //    .Select(e => e.Name).Distinct().ToList();
-
-        //    return Json(ingredients, JsonRequestBehavior.AllowGet);
-        //}
     }
 }

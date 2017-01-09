@@ -60,8 +60,8 @@
             @* @Html.DropDownListFor(c => c.Measurements,Enum.GetValues(typeof(IngredientsMeasurements))
                 .Cast<IngredientsMeasurements>().Select(c => new SelectListItem { Text = c.ToString(),
                  Value = c.ToString() }),new { @id = "measurementId",@class = "btn btn-primary dropdown-toggle" })*@
-            @Html.DropDownList("IngredientsMeasurements",
-        EnumHelper.GetSelectList(typeof(IngredientsMeasurements)),"Select Measurment",
+            @Html.DropDownList("Measurements",
+        EnumHelper.GetSelectList(typeof(Measurements)),"Select Measurment",
       new { @class = "form-control", @id = "measurementId" })
 
 

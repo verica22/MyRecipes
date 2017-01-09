@@ -4,10 +4,14 @@
 using System.Data.Entity;
 using System.Linq;
 
+
 namespace ItLabs.MyRecipes.Data.Repository
 {
     public class RecipeRepository : IRecipeRepository
     {
+        public const int pageSize = 2;
+        //   int pageNumber = (page ?? 1);
+
         private readonly RecipeDBContext _dbContext;
 
         public RecipeRepository()
@@ -30,10 +34,11 @@ namespace ItLabs.MyRecipes.Data.Repository
         //out parameter total
         public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite)
         {
+
             var recipes = _dbContext.Recipes.AsQueryable();
 
             //add total
-            //total = recipes.Count();
+            var total = recipes.Count();
 
             if (!string.IsNullOrEmpty(name))
                 recipes = recipes.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
@@ -42,11 +47,22 @@ namespace ItLabs.MyRecipes.Data.Repository
                 recipes = recipes.Where(x => x.IsDone);
 
             if (isFavourite)
-                recipes = recipes.Where(x => x.IsFavorite);
-            
-            //add paging - skip take etc
+                recipes = recipes.Where(x => x.IsFavorite).OrderBy(x => x.Id).Skip((1 - 1) * pageSize).Take(pageSize);
 
-            return recipes.ToList();
+            //add paging - skip take etc
+            //          var queryResultPage = recipes
+            //.Skip(pageSize * pageNumber)
+            //.Take(pageSize);
+
+            //var pagedQuery =
+            //  from e in recipes.Skip(pageSize * 1).Take(pageSize)
+            //  select new
+            //  {
+            //      Count = recipes.Count(),
+            //      Entity = e
+            //  };
+            return recipes.ToList();//.ToPagedList(page, PageSize);
+
         }
 
         public void Save(Recipe recipe)
@@ -66,14 +82,7 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.SaveChanges();
         }
 
-        public void Update(Recipe recipe)
-        {
-            if (recipe == null)
-                return;
 
-            _dbContext.Entry(recipe).State = EntityState.Modified;
-            _dbContext.SaveChanges();
-        }
 
         public void Remove(int id)
         {
@@ -90,7 +99,7 @@ namespace ItLabs.MyRecipes.Data.Repository
         }
 
         //for this you will need the id (if 0 its new, work on the condition for update and creatae)
-        public bool IsRecipeNameUnique(string name)
+        public bool IsRecipeNameUnique(string name, int? id)
         {
             var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
 
@@ -106,6 +115,12 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
             return ingredient;
+            //var ingredients = _dbContext.Ingredients.AsQueryable();
+
+            //      if (!string.IsNullOrEmpty(name))
+            //    ingredients = ingredients.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
+
+            //return ingredients.ToList();
         }
     }
 }

@@ -51,30 +51,17 @@
   <ItemGroup>
     <Compile Include="EntityFramework\Ingredient.cs" />
     <Compile Include="EntityFramework\RecipeIngredients.cs" />
-    <Compile Include="Migrations\201612071105329_Initial.cs" />
-    <Compile Include="Migrations\201612071105329_Initial.Designer.cs">
-      <DependentUpon>201612071105329_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612141049258_AddRecipeIngredients.cs" />
-    <Compile Include="Migrations\201612141049258_AddRecipeIngredients.Designer.cs">
-      <DependentUpon>201612141049258_AddRecipeIngredients.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612141436178_AddRecipeIngredients1.cs" />
-    <Compile Include="Migrations\201612141436178_AddRecipeIngredients1.Designer.cs">
-      <DependentUpon>201612141436178_AddRecipeIngredients1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201612141436455_AddRecipe.cs" />
-    <Compile Include="Migrations\201612141436455_AddRecipe.Designer.cs">
-      <DependentUpon>201612141436455_AddRecipe.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701041039013_RenamingColumns.cs" />
-    <Compile Include="Migrations\201701041039013_RenamingColumns.Designer.cs">
-      <DependentUpon>201701041039013_RenamingColumns.cs</DependentUpon>
+    <Compile Include="Migrations\201701051209136_NewDatabase.cs" />
+    <Compile Include="Migrations\201701051209136_NewDatabase.Designer.cs">
+      <DependentUpon>201701051209136_NewDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Pagging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityFramework\Recipe.cs" />
     <Compile Include="EntityFramework\RecipeDBContext.cs" />
+    <Compile Include="Repository\IIngredientRepository.cs" />
+    <Compile Include="Repository\IngredientRepository.cs" />
     <Compile Include="Repository\IRecipeRepository.cs" />
     <Compile Include="Repository\RecipeRepository.cs" />
   </ItemGroup>
@@ -83,22 +70,9 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201612071105329_Initial.resx">
-      <DependentUpon>201612071105329_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612141049258_AddRecipeIngredients.resx">
-      <DependentUpon>201612141049258_AddRecipeIngredients.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612141436178_AddRecipeIngredients1.resx">
-      <DependentUpon>201612141436178_AddRecipeIngredients1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201612141436455_AddRecipe.resx">
-      <DependentUpon>201612141436455_AddRecipe.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701041039013_RenamingColumns.resx">
-      <DependentUpon>201701041039013_RenamingColumns.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201701051209136_NewDatabase.resx">
+      <DependentUpon>201701051209136_NewDatabase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

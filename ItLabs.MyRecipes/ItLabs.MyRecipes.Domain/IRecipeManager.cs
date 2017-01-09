@@ -11,7 +11,6 @@ namespace ItLabs.MyRecipes.Domain
 
         ResponseBase SaveRecipe(Recipe recipe);
         void Remove(int Id);
-        void Update(Recipe recipe);
 
         IEnumerable<Ingredient> GetIngredients();
         Ingredient GetIngredient(string name);

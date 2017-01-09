@@ -11,7 +11,6 @@ namespace ItLabs.MyRecipes.Data.Repository
         IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite);
 
         void Save(Recipe recipe);
-        void Update(Recipe recipe);
         void Remove(int id);
 
         IEnumerable<Ingredient> GetIngredients();

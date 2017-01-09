@@ -1,4 +1,7 @@
-﻿@model IEnumerable<ItLabs.MyRecipes.Domain.Recipe>
+﻿@using PagedList.Mvc;
+@*@model PagedList.IPagedList<ItLabs.MyRecipes.Domain.Recipe>*@
+
+@model IEnumerable<ItLabs.MyRecipes.Domain.Recipe>
 
 @{
     ViewBag.Title = "Search";
@@ -90,3 +93,7 @@
 
     </div>
 </div><br>
+<div class="pager">
+    @* Page @Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+    @*@Html.PagedListPager(Model, page => Url.Action("Index",new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+</div>

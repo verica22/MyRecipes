@@ -22,6 +22,7 @@ namespace ItLabs.MyRecipes.Domain.DependencyInjection
 
             //register repositories
             builder.RegisterType<RecipeRepository>().As<IRecipeRepository>();
+            builder.RegisterType<IngredientRepository>().As<IIngredientRepository>();
 
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();

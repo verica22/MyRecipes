@@ -9,7 +9,7 @@ namespace ItLabs.MyRecipes.Domain.Validations
         public IngredientValidator()
         {
             RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Ingredient Name is required");
-            RuleFor(x => x.Measurement).NotEmpty().WithMessage("Measurement is required");
+            RuleFor(x => x.Measurement).NotNull().NotEmpty().WithMessage("Measurement is required");
         }
     }
 }
