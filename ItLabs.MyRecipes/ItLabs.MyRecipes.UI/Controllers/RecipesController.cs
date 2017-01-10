@@ -3,8 +3,8 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PagedList;
 using System.Collections.Generic;
+using PagedList;
 
 namespace ItLabs.MyRecipes.UI.Controllers
 {
@@ -12,7 +12,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
     public class RecipesController : Controller
     {
 
-       // public const int pageSize = 8;
+        public const int pageSize = 2;
 
         public IRecipeManager _recipeManager { get; set; }
 
@@ -26,15 +26,17 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
            int pageNumber = (page ?? 1);
 
-           // return View(_recipeManager.GetRecipes().ToPagedList(pageNumber, pageSize));
-            return View(_recipeManager.GetRecipes().ToList());
+            return View(_recipeManager.GetRecipes().ToPagedList(pageNumber, pageSize));
+                //.OrderBy(x => x.Id)
+                //.Skip((page ?? 0) * pageSize)
+                //.Take(pageSize)
+           // return View(_recipeManager.GetRecipes().ToList());
         }
         [HttpPost]
-        public ActionResult Search(string name, bool isDone, bool isFavourite)
+        public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
         {
             //int pageNumber = (page ?? 1);
-            var recipes = _recipeManager.Search(name, isDone, isFavourite);
-            
+            var recipes = _recipeManager.Search(name, isDone, isFavourite,page);
             return View(recipes);
         }
 
@@ -78,10 +80,10 @@ namespace ItLabs.MyRecipes.UI.Controllers
             {
                 _recipeManager.SaveRecipe(recipe);
                 status = true;
-                
-            }
+             }
             else
             {
+                 //return View("Index", "Recipe");
                 status = false;
             }
             return new JsonResult { Data = new { status = status, Url = "Index" } };

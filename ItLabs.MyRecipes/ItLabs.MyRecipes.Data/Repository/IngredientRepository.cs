@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
-   public class IngredientRepository : IIngredientRepository
+    public class IngredientRepository : IIngredientRepository
     {
         private readonly RecipeDBContext _dbContext;
 

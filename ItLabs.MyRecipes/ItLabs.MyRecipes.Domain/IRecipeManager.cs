@@ -7,7 +7,7 @@ namespace ItLabs.MyRecipes.Domain
     {
         IEnumerable<Recipe> GetRecipes();
         Recipe Get(int Id);
-        IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite);
+        IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite, int? page);
 
         ResponseBase SaveRecipe(Recipe recipe);
         void Remove(int Id);

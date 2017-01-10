@@ -1,9 +1,8 @@
 ﻿@using PagedList.Mvc;
 @*@model PagedList.IPagedList<ItLabs.MyRecipes.Domain.Recipe>*@
-
 @model IEnumerable<ItLabs.MyRecipes.Domain.Recipe>
 
-@{
+@{ 
     ViewBag.Title = "Search";
 }
 
@@ -94,6 +93,18 @@
     </div>
 </div><br>
 <div class="pager">
-    @* Page @Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+     @*Page @Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
     @*@Html.PagedListPager(Model, page => Url.Action("Index",new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+    
+    @*@Html.PagedListPager(Model, page => Url.Action("Search",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+
+    @*<asp:Repeater ID="rptPager" runat="server">
+        <ItemTemplate>
+            <asp:LinkButton ID="lnkPage" runat="server" Text='<%#Eval("Text") %>' CommandArgument='<%#Eval("Value") %>' Enabled='<%#Eval("Enabled") %>'
+                            OnClick="Page_Changed" ForeColor="#267CB2" Font-Bold="true" />
+        </ItemTemplate>
+    </asp:Repeater>*@
+       
+
 </div>

@@ -9,15 +9,18 @@
 <hr />
 
 <div class="container col-sm-6">
+@using (Html.BeginForm())
+{
     <div class="container">
         <form>
             <div class="form-group col-sm-12">
                 <label for="name">Recipe Name:</label>
                 <input type="text" class="form-control" id="recipeName">
-               @* <span class="error">Recipe name required</span>*@
+                <span class="error"></span>
+                @Html.ValidationMessageFor(x => x.Name)
                 @*@Html.TextBoxFor(x => x.Name)*@
 
-                @Html.ValidationMessageFor(x => x.Name)
+               
             </div>
             <div class="form-group col-sm-12">
                 <label for="comment">Description:</label>
@@ -31,6 +34,7 @@
             </div>
         </form>
     </div>
+}
     <div class="container">
         <h4><b>Ingredients</b></h4>
         <hr />
@@ -43,7 +47,8 @@
        
                     <br />
                     <input type="text" class="form-control" id="ingredientsName">
-                    <span class="error">Name required</span>
+                    // <span class="error">Name required</span>
+                    @Html.ValidationMessageFor(x => x.RecipeIngredients)
                 }
 
             </div>
@@ -52,17 +57,19 @@
             <div class="container">
                 <label for="quantity">Quantity:</label>
                 <input type="text" class="form-control" id="quantity">
-                <span class="error">Valid quantity required</span>
+                @*<span class="error">Valid quantity required</span>*@
             </div>
         </div>
         <div class="container col-sm-4">
             <label for="quantity">Measurement:</label>
-            @* @Html.DropDownListFor(c => c.Measurements,Enum.GetValues(typeof(IngredientsMeasurements))
-                .Cast<IngredientsMeasurements>().Select(c => new SelectListItem { Text = c.ToString(),
-                 Value = c.ToString() }),new { @id = "measurementId",@class = "btn btn-primary dropdown-toggle" })*@
             @Html.DropDownList("Measurements",
-        EnumHelper.GetSelectList(typeof(Measurements)),"Select Measurment",
-      new { @class = "form-control", @id = "measurementId" })
+            Enum.GetValues(typeof(Measurements))
+                .Cast<Measurements>().Select(c => new SelectListItem
+                {
+                    Text = c.ToString(),
+                    Value = c.ToString()
+                }),
+            new { @class = "form-control", @id = "measurementId" })
 
 
 
@@ -91,10 +98,6 @@
 
 </div>
 
-
-@*<div>
-        @Html.ActionLink("Back to MyRecipes", "Index")
-    </div>*@
 
 @section Scripts {
     <script type="text/javascript">

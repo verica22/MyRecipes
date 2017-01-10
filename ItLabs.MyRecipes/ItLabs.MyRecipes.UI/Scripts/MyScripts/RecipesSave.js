@@ -64,9 +64,8 @@ $('#submit').click(function () {
             Id: $("#recipeId").val(),
             Name: $('#recipeName').val().trim(),
             Description: $('#description').val().trim(),
-            Done: $('#doneRecipe').is(":checked"),
-            Favorites: $('#favouriteRecipe').is(":checked"),
-            //  Measurements: $('#measurementId').val(),
+            IsDone: $('#doneRecipe').is(":checked"),
+            IsFavorite: $('#favouriteRecipe').is(":checked"),
             RecipeIngredients: orderItems
         }
 
@@ -86,7 +85,7 @@ $('#submit').click(function () {
                 if (d.status == true) {
                     //will send status from server side
                     alert('Successfully done.');
-                    windows.location.href = d.Url
+                   // windows.location.href = d.Url
                     //clear form
                     //orderItems = [];
                     //$('#recipeName').val('');
@@ -99,6 +98,10 @@ $('#submit').click(function () {
                 $('#submit').val('Save');
             },
             error: function (err) {
+                if ($('#recipeName').val().trim() == '') {
+                    $('#recipeName').siblings('span.error').css('visibility', 'visible');
+                    isAllValid = false;
+                }
                 alert('Error. Please try again.');
                 $('#submit').val('Save');
             }

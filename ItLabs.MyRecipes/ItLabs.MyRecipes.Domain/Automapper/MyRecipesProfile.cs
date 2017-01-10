@@ -21,7 +21,13 @@ namespace ItLabs.MyRecipes.Domain.Automapper
 
             CreateMap<Data.Ingredient, Ingredient>()
                  .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients))
-                  .ReverseMap();
+                 .ReverseMap();
+
+            //CreateMap<Recipe, Data.Recipe>()
+            //    .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients));
+
+            //CreateMap<Ingredient, Data.Ingredient>()
+            //    .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients));
 
             CreateMap<RecipeIngredient, Data.RecipeIngredients>()
                 .ForMember(d => d.Recipe, o => o.Ignore())

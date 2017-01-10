@@ -39,9 +39,9 @@ namespace ItLabs.MyRecipes.Domain.Managers
         }
 
         //see repository comments
-        public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite)
+        public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite, int? page)
         {
-            var dbRecipes = _recipeRepository.Search(name, isDone, isFavourite);
+            var dbRecipes = _recipeRepository.Search(name, isDone, isFavourite,page);
             var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
             return recipes;
         }
@@ -58,9 +58,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
                 response.IsSuccessful = false;
                 response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
                 return response;
-                //Console.WriteLine(response);
-                //Console.ReadLine();
-            }
+              }
 
             Data.Recipe dataRecipe;
            
@@ -104,9 +102,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
                     Quantity = recipeIngredient.Quantity
                 });
             }
-
-          
-
+            
             _recipeRepository.Save(dataRecipe);
             return response;
         }
@@ -120,12 +116,9 @@ namespace ItLabs.MyRecipes.Domain.Managers
             _recipeRepository.Remove(id);
         }
 
-
-
-
         public IEnumerable<Ingredient> GetIngredients()
         {
-           // var dbIngredients = _ingredientRepository.GetIngredients();
+            //var dbIngredients = _ingredientRepository.GetIngredients();
             var dbIngredients = _recipeRepository.GetIngredients();
             var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
             return ingredients;
@@ -138,5 +131,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
             var ingredients = Mapper.Map<Ingredient>(dbIngredients);
             return ingredients;
         }
+
+        
     }
 }

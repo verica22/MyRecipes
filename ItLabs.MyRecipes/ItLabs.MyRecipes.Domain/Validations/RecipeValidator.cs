@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using ItLabs.MyRecipes.Data;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 //todo
 //uncomment this and use it
@@ -15,29 +13,47 @@ namespace ItLabs.MyRecipes.Domain.Validations
 {
     public class RecipeValidator : AbstractValidator<Recipe>
     {
-       
+
         public RecipeValidator()
         {
-            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Recipe Name is required");
-            RuleFor(x => x.Name).Length(4, 100).WithMessage("Recipe Name must be at least 4 characters");
-            RuleFor(x => x.RecipeIngredients).NotNull().NotEmpty().WithMessage("Please add ingredients");
-            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Recipe Name is required");
-            //RuleFor(x => x.Name).Must(IsRecipeNameUnique(name)).WithMessage("This Email id has already been registered"); ;
-
-            // RuleFor(x => x.Name).IsUnique(recipes).WithMessage("Name must be unique");
-            //      RuleFor(x => x.Name).SetValidator(new UniquePropertyValidator<RecipeDBContext>(Recipe.).WithMessage("This Recipe has already been registered");
-            //      RuleFor(player => player.Name).SetValidator(new UniqueValidator<Player>(players))
-            //.WithMessage("Name must be unique");
-
-            //RuleFor(x => x.RecipeIngredients.All<Ingredient>).NotNull().NotEmpty().WithMessage("Please add ingredients");
-
+            RuleFor(x => x.Name)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Recipe Name is required")
+                .Length(4, 100)
+                .WithMessage("Recipe Name must be at least 4 characters")
+                .Must(IsRecipeNameUnique)
+                .WithMessage("This Recipe name already exist");
+            
+            RuleFor(x => x.RecipeIngredients)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Please add ingredients");
+            
+            //RuleFor(x => x.RecipeIngredients.All<RecipeIngredients>)
+            //    .NotNull()
+            //    .NotEmpty()
+            //    .WithMessage("Please add ingredients");
+       }
+        private bool IsRecipeNameUnique(Recipe recipe, string name)
+        {
+            bool isUnique = false;
+            Data.Recipe recipeName;
+            using (RecipeDBContext db = new RecipeDBContext())
+            {
+                recipeName = db.Recipes.FirstOrDefault(x => x.Name == name);
+            }
+            if (recipeName == null)
+            {
+                isUnique = true;
+            }
+            else
+            {
+                isUnique = recipeName.Id == recipe.Id;
+            }
+            return isUnique;
         }
-       
+
     }
- //   public static IRuleBuilderOptions<TItem, TProperty> IsUnique<TItem, TProperty>(
- //this IRuleBuilder<TItem, TProperty> ruleBuilder, IEnumerable<TItem> items)
- //  where TItem : class
- //   {
- //       return ruleBuilder.SetValidator(new UniqueValidator<TItem>(items));
- //   }
+
 }
