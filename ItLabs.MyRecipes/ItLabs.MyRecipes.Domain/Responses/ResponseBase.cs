@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ItLabs.MyRecipes.Domain.Responses
 {
@@ -9,7 +10,6 @@ namespace ItLabs.MyRecipes.Domain.Responses
             IsSuccessful = true;
             Errors = new List<string>();
         }
-
         public bool IsSuccessful { get; set; }
         public List<string> Errors { get; set; }
     }

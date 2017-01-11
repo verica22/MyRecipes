@@ -232,9 +232,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ItLabs.MyRecipes.Data\ItLabs.MyRecipes.Data.csproj">
-      <Project>{3679EB4B-AEB3-4D32-BC12-967A16E0BAC1}</Project>
-      <Name>ItLabs.MyRecipes.Data</Name>
+    <ProjectReference Include="..\ItLabs.MyRecipes.Core\ItLabs.MyRecipes.Core.csproj">
+      <Project>{e48def98-97f5-443c-8991-92cbaf3aa429}</Project>
+      <Name>ItLabs.MyRecipes.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\ItLabs.MyRecipes.Domain\ItLabs.MyRecipes.Domain.csproj">
       <Project>{96f6b9a4-a33c-4c56-a473-a6132af6976e}</Project>

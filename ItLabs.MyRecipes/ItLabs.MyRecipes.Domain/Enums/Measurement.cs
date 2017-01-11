@@ -1,8 +1,6 @@
 ﻿namespace ItLabs.MyRecipes.Domain.Enums
 {
-    //todo
-    //rename to Measurement
-    public enum Measurements
+    public enum Measurement
     {
         Spoon = 1,
         Teaspoon = 2,

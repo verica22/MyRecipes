@@ -2,9 +2,7 @@
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
-    //todo add new Ingredients repository
-    //do we need Update? Use Save
-   public interface IRecipeRepository
+     public interface IRecipeRepository
     {
         IEnumerable<Recipe> GetRecipes();
         Recipe GetRecipe(int id);
@@ -13,7 +11,6 @@ namespace ItLabs.MyRecipes.Data.Repository
         void Save(Recipe recipe);
         void Remove(int id);
 
-        //bool IsRecipeNameUnique(string name);
         IEnumerable<Ingredient> GetIngredients();
         Ingredient GetIngredient(string name);
 

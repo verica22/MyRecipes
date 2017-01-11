@@ -4,11 +4,9 @@ using AutoMapper;
 using System.Linq;
 using ItLabs.MyRecipes.Domain.Validations;
 using ItLabs.MyRecipes.Domain.Responses;
-using System;
 
 namespace ItLabs.MyRecipes.Domain.Managers
 {
-    //todo
     public class RecipeManager : IRecipeManager
     {
         public IRecipeRepository _recipeRepository { get; set; }
@@ -38,7 +36,6 @@ namespace ItLabs.MyRecipes.Domain.Managers
             return recipe;
         }
 
-        //see repository comments
         public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite, int? page)
         {
             var dbRecipes = _recipeRepository.Search(name, isDone, isFavourite,page);
@@ -75,7 +72,6 @@ namespace ItLabs.MyRecipes.Domain.Managers
             else
             {
                 dataRecipe = _recipeRepository.GetRecipe(recipe.Id);
-               // dataRecipe = Mapper.Map<Data.Recipe>(recipe);
                 dataRecipe.Name = recipe.Name;
                 dataRecipe.Description = recipe.Description;
                 dataRecipe.IsDone = recipe.IsDone;

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-//todo
-//for include purposes
 using System.Data.Entity;
 using System.Linq;
 
@@ -9,7 +7,7 @@ namespace ItLabs.MyRecipes.Data.Repository
 {
     public class RecipeRepository : IRecipeRepository
     {
-             public const int pageSize = 2;
+        //     public const int pageSize = 4;
         //   int pageNumber = (page ?? 1);
 
         private readonly RecipeDBContext _dbContext;
@@ -50,10 +48,11 @@ namespace ItLabs.MyRecipes.Data.Repository
                 recipes = recipes.Where(x => x.IsFavorite);
 
             //add paging - skip take etc
-            return recipes.OrderBy(x => x.Id)
-                .Skip((page ?? 0) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            return recipes.ToList();
+                //.OrderBy(x => x.Id)
+                //.Skip((page ?? 0) * pageSize)
+                //.Take(pageSize)
+                //.ToList();
             //.ToPagedList(page, PageSize);
 
         }
@@ -90,13 +89,7 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
         }
-
-        // public bool IsRecipeNameUnique(string name)
-        //{
-        //    var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
-        //    return (recipe == null);
-        //}
-
+        
         public IEnumerable<Ingredient> GetIngredients()
         {
             return _dbContext.Ingredients.ToList();
@@ -106,12 +99,7 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
             return ingredient;
-            //var ingredients = _dbContext.Ingredients.AsQueryable();
 
-            //      if (!string.IsNullOrEmpty(name))
-            //    ingredients = ingredients.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
-
-            //return ingredients.ToList();
         }
     }
 }

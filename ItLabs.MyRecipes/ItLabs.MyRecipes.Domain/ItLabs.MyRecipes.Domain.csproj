@@ -97,7 +97,7 @@
     <Compile Include="Contracts\Recipe.cs" />
     <Compile Include="Contracts\RecipeIngredient.cs" />
     <Compile Include="DependencyInjection\IoCConfig.cs" />
-    <Compile Include="Enums\Measurements.cs" />
+    <Compile Include="Enums\Measurement.cs" />
     <Compile Include="IRecipeManager.cs" />
     <Compile Include="Managers\RecipeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +106,10 @@
     <Compile Include="Validations\RecipeValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ItLabs.MyRecipes.Core\ItLabs.MyRecipes.Core.csproj">
+      <Project>{e48def98-97f5-443c-8991-92cbaf3aa429}</Project>
+      <Name>ItLabs.MyRecipes.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ItLabs.MyRecipes.Data\ItLabs.MyRecipes.Data.csproj">
       <Project>{3679eb4b-aeb3-4d32-bc12-967a16e0bac1}</Project>
       <Name>ItLabs.MyRecipes.Data</Name>

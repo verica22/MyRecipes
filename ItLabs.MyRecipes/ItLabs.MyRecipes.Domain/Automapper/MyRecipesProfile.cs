@@ -2,9 +2,6 @@
 
 namespace ItLabs.MyRecipes.Domain.Automapper
 {
-    //todo
-    //try using ReverseMap for Recipe and Ingredient for readability 
-
     public class MyRecipesProfile : Profile
     {
         public MyRecipesProfile()
@@ -22,12 +19,6 @@ namespace ItLabs.MyRecipes.Domain.Automapper
             CreateMap<Data.Ingredient, Ingredient>()
                  .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients))
                  .ReverseMap();
-
-            //CreateMap<Recipe, Data.Recipe>()
-            //    .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients));
-
-            //CreateMap<Ingredient, Data.Ingredient>()
-            //    .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients));
 
             CreateMap<RecipeIngredient, Data.RecipeIngredients>()
                 .ForMember(d => d.Recipe, o => o.Ignore())

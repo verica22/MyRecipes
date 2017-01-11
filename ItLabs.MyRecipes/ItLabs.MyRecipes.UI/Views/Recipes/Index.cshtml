@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc;
-@model PagedList.IPagedList<ItLabs.MyRecipes.Domain.Recipe>
-@*@model IEnumerable<ItLabs.MyRecipes.Domain.Recipe>*@
+@*@model PagedList.IPagedList<ItLabs.MyRecipes.Domain.Recipe>*@
+@model IEnumerable<ItLabs.MyRecipes.Domain.Recipe>
 
 @{
     ViewBag.Title = "Index";
@@ -106,6 +106,6 @@
 
 <div class="pager">
     @* Page @Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
-    @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page }))
+    @*@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page }))*@
 </div>

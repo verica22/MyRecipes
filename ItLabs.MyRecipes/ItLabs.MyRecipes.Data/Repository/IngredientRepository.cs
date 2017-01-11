@@ -12,7 +12,16 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             _dbContext = new RecipeDBContext();
         }
+        public IEnumerable<Ingredient> GetIngredients()
+        {
+            return _dbContext.Ingredients.ToList();
+        }
 
+        public Ingredient GetIngredient(string name)
+        {
+            var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
+            return ingredient;
+        }
         public void Save(Ingredient ingredient)
         {
             if (ingredient == null)
@@ -42,15 +51,6 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.Ingredients.Remove(ingredient);
             _dbContext.SaveChanges();
         }
-        public IEnumerable<Ingredient> GetIngredients()
-        {
-            return _dbContext.Ingredients.ToList();
-        }
-
-        public Ingredient GetIngredient(string name)
-        {
-            var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
-            return ingredient;
-        }
+       
     }
 }

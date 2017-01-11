@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ItLabs.MyRecipes.Data
 {
-    public class Pagging
+    public class Paging
     {
         public const int pageSize = 2;
         //   int pageNumber = (page ?? 1);

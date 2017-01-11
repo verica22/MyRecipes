@@ -8,10 +8,10 @@ namespace ItLabs.MyRecipes.Data.Repository
 {
    public interface IIngredientRepository
     {
-
-        void Save(Ingredient ingredient);
-        void Remove(string name);
         IEnumerable<Ingredient> GetIngredients();
         Ingredient GetIngredient(string name);
+        void Save(Ingredient ingredient);
+        void Remove(string name);
+       
     }
 }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using PagedList;
+using ItLabs.MyRecipes.Domain.Responses;
 
 namespace ItLabs.MyRecipes.UI.Controllers
 {
@@ -12,7 +13,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
     public class RecipesController : Controller
     {
 
-        public const int pageSize = 2;
+       // public const int pageSize = 2;
 
         public IRecipeManager _recipeManager { get; set; }
 
@@ -24,9 +25,10 @@ namespace ItLabs.MyRecipes.UI.Controllers
         public ActionResult Index(int? page)
         {
 
-           int pageNumber = (page ?? 1);
+            // int pageNumber = (page ?? 1);
 
-            return View(_recipeManager.GetRecipes().ToPagedList(pageNumber, pageSize));
+            return View(_recipeManager.GetRecipes().ToList());
+                //.ToPagedList(pageNumber, pageSize));
                 //.OrderBy(x => x.Id)
                 //.Skip((page ?? 0) * pageSize)
                 //.Take(pageSize)
@@ -75,19 +77,16 @@ namespace ItLabs.MyRecipes.UI.Controllers
         public JsonResult Save(Recipe recipe)
         {
             bool status = false;
+            ResponseBase result = null;
 
             if (ModelState.IsValid)
             {
-                _recipeManager.SaveRecipe(recipe);
+                result = _recipeManager.SaveRecipe(recipe);
                 status = true;
-             }
-            else
-            {
-                 //return View("Index", "Recipe");
-                status = false;
             }
-            return new JsonResult { Data = new { status = status, Url = "Index" } };
-         
+
+            return new JsonResult { Data = new { status, result, Url = "Index" } };
+
         }
         //GET: Edit
         public ActionResult Edit(int id)

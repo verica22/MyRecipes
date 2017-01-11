@@ -62,9 +62,9 @@
         </div>
         <div class="container col-sm-4">
             <label for="quantity">Measurement:</label>
-            @Html.DropDownList("Measurements",
-            Enum.GetValues(typeof(Measurements))
-                .Cast<Measurements>().Select(c => new SelectListItem
+            @Html.DropDownList("Measurement",
+            Enum.GetValues(typeof(Measurement))
+                .Cast<Measurement>().Select(c => new SelectListItem
                 {
                     Text = c.ToString(),
                     Value = c.ToString()

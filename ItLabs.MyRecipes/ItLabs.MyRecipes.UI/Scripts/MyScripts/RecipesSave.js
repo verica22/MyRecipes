@@ -41,7 +41,7 @@ $('#add').click(function () {
 //Save button click function
 debugger;
 $('#submit').click(function () {
-    //validation of order
+    //validation 
     debugger;
     var isAllValid = true;
     if (orderItems.length == 0) {
@@ -80,12 +80,22 @@ $('#submit').click(function () {
             contentType: "application/json",
 
             success: function (d) {
-                debugger;
-                //check is successfully save to database
+                 //check is successfully save to database
                 if (d.status == true) {
-                    //will send status from server side
-                    alert('Successfully done.');
-                   // windows.location.href = d.Url
+                  //will send status from server side
+                    if (d.result != null) {
+                        if (d.result.Errors.length > 0) {
+                            var stringResult = ""
+                            $.each(d.result.Errors, function (index, value) {
+                                stringResult += value + "\n"
+                              });
+                            alert(stringResult);
+                        } else {
+                            alert('Successfully done.');
+                            location.href = d.Url
+                        }
+                       
+                    }
                     //clear form
                     //orderItems = [];
                     //$('#recipeName').val('');
@@ -94,14 +104,12 @@ $('#submit').click(function () {
                 }
                 else {
                     alert('Failed');
+
                 }
                 $('#submit').val('Save');
             },
             error: function (err) {
-                if ($('#recipeName').val().trim() == '') {
-                    $('#recipeName').siblings('span.error').css('visibility', 'visible');
-                    isAllValid = false;
-                }
+               
                 alert('Error. Please try again.');
                 $('#submit').val('Save');
             }
