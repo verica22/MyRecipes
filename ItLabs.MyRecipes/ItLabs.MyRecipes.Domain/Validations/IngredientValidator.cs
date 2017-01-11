@@ -4,7 +4,7 @@
 //add notnull check
 namespace ItLabs.MyRecipes.Domain.Validations
 {
-    class IngredientValidator : AbstractValidator<Ingredient>
+    public class IngredientValidator : AbstractValidator<Ingredient>
     {
         public IngredientValidator()
         {

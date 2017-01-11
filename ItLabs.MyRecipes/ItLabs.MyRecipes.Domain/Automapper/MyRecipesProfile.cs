@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ItLabs.MyRecipes.Domain.Enums;
+using System;
 
 namespace ItLabs.MyRecipes.Domain.Automapper
 {
@@ -18,6 +20,7 @@ namespace ItLabs.MyRecipes.Domain.Automapper
 
             CreateMap<Data.Ingredient, Ingredient>()
                  .ForMember(d => d.RecipeIngredients, o => o.MapFrom(x => x.RecipeIngredients))
+                 .ForMember(d => d.Measurement, o => o.MapFrom(x => Enum.Parse(typeof(Measurement), x.Measurement)))
                  .ReverseMap();
 
             CreateMap<RecipeIngredient, Data.RecipeIngredients>()

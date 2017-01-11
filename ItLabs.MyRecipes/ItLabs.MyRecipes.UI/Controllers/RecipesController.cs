@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Collections.Generic;
-using PagedList;
 using ItLabs.MyRecipes.Domain.Responses;
 
 namespace ItLabs.MyRecipes.UI.Controllers
@@ -24,21 +23,13 @@ namespace ItLabs.MyRecipes.UI.Controllers
         
         public ActionResult Index(int? page)
         {
-
-            // int pageNumber = (page ?? 1);
-
-            return View(_recipeManager.GetRecipes().ToList());
-                //.ToPagedList(pageNumber, pageSize));
-                //.OrderBy(x => x.Id)
-                //.Skip((page ?? 0) * pageSize)
-                //.Take(pageSize)
-           // return View(_recipeManager.GetRecipes().ToList());
+            var recipes = _recipeManager.Search(string.Empty, false, false, page.HasValue ? page.Value : 1);
+            return View(recipes);
         }
         [HttpPost]
         public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
         {
-            //int pageNumber = (page ?? 1);
-            var recipes = _recipeManager.Search(name, isDone, isFavourite,page);
+            var recipes = _recipeManager.Search(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
             return View(recipes);
         }
 
@@ -102,7 +93,6 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
         public JsonResult GetIngredient(string term)
         {
-
              List<string> ingredients;
            // var ingredients = _recipeManager.GetIngredient(term);
             ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(term))

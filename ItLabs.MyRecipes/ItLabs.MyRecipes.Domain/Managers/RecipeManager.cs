@@ -4,29 +4,20 @@ using AutoMapper;
 using System.Linq;
 using ItLabs.MyRecipes.Domain.Validations;
 using ItLabs.MyRecipes.Domain.Responses;
+using PagedList;
+using AutoMapper.QueryableExtensions;
 
 namespace ItLabs.MyRecipes.Domain.Managers
 {
     public class RecipeManager : IRecipeManager
     {
         public IRecipeRepository _recipeRepository { get; set; }
+        public IIngredientRepository _ingredientRepository { get; set; }
 
-        public RecipeManager(IRecipeRepository recipeRepository)
+        public RecipeManager(IRecipeRepository recipeRepository, IIngredientRepository ingredientRepository)
         {
             _recipeRepository = recipeRepository;
-        }
-        //public IIngredientRepository _ingredientRepository { get; set; }
-
-        //public RecipeManager(IIngredientRepository ingredientRepository)
-        //{
-        //    _ingredientRepository = ingredientRepository;
-        //}
-
-        public IEnumerable<Recipe> GetRecipes()
-        {
-            var dbRecipes = _recipeRepository.GetRecipes();
-            var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
-            return recipes;
+            _ingredientRepository = ingredientRepository;
         }
 
         public Recipe Get(int Id)
@@ -36,11 +27,21 @@ namespace ItLabs.MyRecipes.Domain.Managers
             return recipe;
         }
 
-        public IEnumerable<Recipe> Search(string name, bool isDone, bool isFavourite, int? page)
+        public IPagedList<Recipe> Search(string name, bool isDone, bool isFavourite, int page, int pageSize = Core.Constants.DefaultPageSize)
         {
-            var dbRecipes = _recipeRepository.Search(name, isDone, isFavourite,page);
-            var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
-            return recipes;
+            var dbRecipes = _recipeRepository.GetRecipes();
+
+            if (!string.IsNullOrEmpty(name))
+                dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
+
+            if (isDone)
+                dbRecipes = dbRecipes.Where(x => x.IsDone);
+
+            if (isFavourite)
+                dbRecipes = dbRecipes.Where(x => x.IsFavorite);
+
+            var recipes = dbRecipes.ProjectTo<Recipe>();
+            return recipes.OrderBy(x => x.Name).ToPagedList(page, pageSize);
         }
 
         public ResponseBase SaveRecipe(Recipe recipe)
@@ -55,10 +56,9 @@ namespace ItLabs.MyRecipes.Domain.Managers
                 response.IsSuccessful = false;
                 response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
                 return response;
-              }
+            }
 
             Data.Recipe dataRecipe;
-           
             if (recipe.Id == 0)
             {
                 dataRecipe = new Data.Recipe
@@ -76,12 +76,11 @@ namespace ItLabs.MyRecipes.Domain.Managers
                 dataRecipe.Description = recipe.Description;
                 dataRecipe.IsDone = recipe.IsDone;
                 dataRecipe.IsFavorite = recipe.IsFavorite;
-                
             }
 
             foreach (var recipeIngredient in recipe.RecipeIngredients)
             {
-                var dataIngredient = _recipeRepository.GetIngredient(recipeIngredient.IngredientName);
+                var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.IngredientName);
                 if (dataIngredient == null)
                 {
                     dataIngredient = new Data.Ingredient()
@@ -98,7 +97,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
                     Quantity = recipeIngredient.Quantity
                 });
             }
-            
+
             _recipeRepository.Save(dataRecipe);
             return response;
         }
@@ -114,20 +113,16 @@ namespace ItLabs.MyRecipes.Domain.Managers
 
         public IEnumerable<Ingredient> GetIngredients()
         {
-            //var dbIngredients = _ingredientRepository.GetIngredients();
-            var dbIngredients = _recipeRepository.GetIngredients();
+            var dbIngredients = _ingredientRepository.GetIngredients();
             var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
             return ingredients;
         }
 
         public Ingredient GetIngredient(string name)
         {
-           // var dbIngredients = _ingredientRepository.GetIngredients();
-            var dbIngredients = _recipeRepository.GetIngredients();
+            var dbIngredients = _ingredientRepository.GetIngredients();
             var ingredients = Mapper.Map<Ingredient>(dbIngredients);
             return ingredients;
         }
-
-        
     }
 }

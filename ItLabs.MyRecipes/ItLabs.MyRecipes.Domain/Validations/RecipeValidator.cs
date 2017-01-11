@@ -13,7 +13,6 @@ namespace ItLabs.MyRecipes.Domain.Validations
 {
     public class RecipeValidator : AbstractValidator<Recipe>
     {
-
         public RecipeValidator()
         {
             RuleFor(x => x.Name)
@@ -24,17 +23,19 @@ namespace ItLabs.MyRecipes.Domain.Validations
                 .WithMessage("Recipe Name must be at least 4 characters")
                 .Must(IsRecipeNameUnique)
                 .WithMessage("This Recipe name already exist");
-            
+
             RuleFor(x => x.RecipeIngredients)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Please add ingredients");
-            
+
             //RuleFor(x => x.RecipeIngredients.All<RecipeIngredients>)
             //    .NotNull()
             //    .NotEmpty()
             //    .WithMessage("Please add ingredients");
-       }
+        }
+
+        //use repository call here 
         private bool IsRecipeNameUnique(Recipe recipe, string name)
         {
             bool isUnique = false;
