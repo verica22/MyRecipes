@@ -1,4 +1,4 @@
-﻿namespace ItLabs.MyRecipes.Domain.Enums
+﻿namespace ItLabs.MyRecipes.Core.Enums
 {
     public enum Measurement
     {

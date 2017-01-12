@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ItLabs.MyRecipes.Domain.Responses
+namespace ItLabs.MyRecipes.Core.Responses
 {
     public class ResponseBase
     {

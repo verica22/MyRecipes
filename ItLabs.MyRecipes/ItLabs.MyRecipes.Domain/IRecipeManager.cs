@@ -1,8 +1,8 @@
-﻿using ItLabs.MyRecipes.Domain.Responses;
+﻿using ItLabs.MyRecipes.Core.Responses;
 using PagedList;
 using System.Collections.Generic;
 
-namespace ItLabs.MyRecipes.Domain
+namespace ItLabs.MyRecipes.Core
 {
     public interface IRecipeManager
     {
@@ -13,6 +13,7 @@ namespace ItLabs.MyRecipes.Domain
         void Remove(int Id);
 
         IEnumerable<Ingredient> GetIngredients();
+        IEnumerable<Ingredient> SearchIngredients(string name);
         Ingredient GetIngredient(string name);
     }
 }

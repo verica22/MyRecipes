@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using ItLabs.MyRecipes.Data;
+using System.Data.Entity;
 using System.Linq;
 
 namespace ItLabs.MyRecipes.Data.Repository
@@ -52,6 +53,26 @@ namespace ItLabs.MyRecipes.Data.Repository
 
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
+        }
+        public bool IsRecipeNameUnique(Recipe recipe, string name)
+        {
+            //var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
+            //return (recipe == null);
+            bool isUnique = false;
+            Recipe recipeName;
+            using (_dbContext)
+            {
+                recipeName = _dbContext.Recipes.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+            }
+            if (recipeName == null)
+            {
+                isUnique = true;
+            }
+            else
+            {
+                isUnique = recipeName.Id == recipe.Id;
+            }
+            return isUnique;
         }
     }
 }

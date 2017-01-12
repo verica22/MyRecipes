@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using ItLabs.MyRecipes.Data.Repository;
-using ItLabs.MyRecipes.Domain.Managers;
+using ItLabs.MyRecipes.Core.Managers;
 using System.Reflection;
 using System.Web.Mvc;
 
-namespace ItLabs.MyRecipes.Domain.DependencyInjection
+namespace ItLabs.MyRecipes.Core.DependencyInjection
 {
     public class IoCConfig
     {

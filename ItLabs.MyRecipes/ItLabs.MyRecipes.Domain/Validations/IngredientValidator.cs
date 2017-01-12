@@ -2,7 +2,7 @@
 
 //todo
 //add notnull check
-namespace ItLabs.MyRecipes.Domain.Validations
+namespace ItLabs.MyRecipes.Core.Validations
 {
     public class IngredientValidator : AbstractValidator<Ingredient>
     {

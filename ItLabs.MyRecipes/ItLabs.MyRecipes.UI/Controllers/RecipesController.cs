@@ -1,24 +1,22 @@
-﻿using ItLabs.MyRecipes.Domain;
+﻿using ItLabs.MyRecipes.Core;
 using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Collections.Generic;
-using ItLabs.MyRecipes.Domain.Responses;
+using ItLabs.MyRecipes.Core.Responses;
 
 namespace ItLabs.MyRecipes.UI.Controllers
 {
 
     public class RecipesController : Controller
     {
-
-       // public const int pageSize = 2;
-
         public IRecipeManager _recipeManager { get; set; }
 
         public RecipesController(IRecipeManager recipeManager)
         {
             _recipeManager = recipeManager;
+
         }
         
         public ActionResult Index(int? page)
@@ -94,10 +92,13 @@ namespace ItLabs.MyRecipes.UI.Controllers
         public JsonResult GetIngredient(string term)
         {
              List<string> ingredients;
-           // var ingredients = _recipeManager.GetIngredient(term);
+
+            // ingredients = _recipeManager.GetIngredient(term);
+
             ingredients = _recipeManager.GetIngredients().Where(x => x.Name.ToLower().StartsWith(term))
             .Select(e => e.Name).Distinct().ToList();
 
+            //ingredients = _recipeManager.SearchIngredients(term);
             return Json(ingredients, JsonRequestBehavior.AllowGet);
         }
     }

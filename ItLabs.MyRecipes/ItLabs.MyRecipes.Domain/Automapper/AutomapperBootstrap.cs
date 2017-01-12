@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace ItLabs.MyRecipes.Domain.Automapper
+namespace ItLabs.MyRecipes.Core.Automapper
 {
     public class AutomapperBootstrap
     {

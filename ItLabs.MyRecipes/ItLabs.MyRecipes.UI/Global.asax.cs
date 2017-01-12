@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Mvc;
-using ItLabs.MyRecipes.Domain.Automapper;
-using ItLabs.MyRecipes.Domain.DependencyInjection;
+using ItLabs.MyRecipes.Core.Automapper;
+using ItLabs.MyRecipes.Core.DependencyInjection;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -16,6 +17,10 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             return _dbContext.Ingredients.ToList();
         }
+        //public IEnumerable<Ingredient> SearchIngredients(string name)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Ingredient GetIngredient(string name)
         {
@@ -51,6 +56,7 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.Ingredients.Remove(ingredient);
             _dbContext.SaveChanges();
         }
+
        
     }
 }

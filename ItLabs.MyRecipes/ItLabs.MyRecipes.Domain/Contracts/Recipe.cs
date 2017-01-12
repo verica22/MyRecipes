@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ItLabs.MyRecipes.Domain
+namespace ItLabs.MyRecipes.Core
 {
     public class Recipe
     {

@@ -1,4 +1,4 @@
-﻿namespace ItLabs.MyRecipes.Domain
+﻿namespace ItLabs.MyRecipes.Core
 {
     public class RecipeIngredient
     {

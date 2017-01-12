@@ -1,7 +1,7 @@
-﻿using ItLabs.MyRecipes.Domain.Enums;
+﻿using ItLabs.MyRecipes.Core.Enums;
 using System.Collections.Generic;
 
-namespace ItLabs.MyRecipes.Domain
+namespace ItLabs.MyRecipes.Core
 {
     public class Ingredient
     {

@@ -1,5 +1,5 @@
-﻿@model ItLabs.MyRecipes.Domain.Recipe
-@using ItLabs.MyRecipes.Domain.Enums
+﻿@model ItLabs.MyRecipes.Core.Recipe
+@using ItLabs.MyRecipes.Core.Enums
 @{ Layout = null; }
 
 @using (Html.BeginForm())
@@ -82,7 +82,7 @@
             <div class="container col-sm-4">
                 <label for="quantity">Measurement:</label>
                 @Html.DropDownList("IngredientsMeasurements",
-        EnumHelper.GetSelectList(typeof(Measurements)), "Select Measurment",
+        EnumHelper.GetSelectList(typeof(Measurement)), "Select Measurment",
       new { @class = "form-control", @id = "measurementId" })
 
 

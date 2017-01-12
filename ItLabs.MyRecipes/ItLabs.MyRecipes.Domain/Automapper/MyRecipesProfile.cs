@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ItLabs.MyRecipes.Domain.Enums;
+using ItLabs.MyRecipes.Core.Enums;
 using System;
 
-namespace ItLabs.MyRecipes.Domain.Automapper
+namespace ItLabs.MyRecipes.Core.Automapper
 {
     public class MyRecipesProfile : Profile
     {

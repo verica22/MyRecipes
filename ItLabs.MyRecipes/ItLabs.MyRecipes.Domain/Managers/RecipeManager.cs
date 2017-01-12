@@ -2,12 +2,12 @@
 using ItLabs.MyRecipes.Data.Repository;
 using AutoMapper;
 using System.Linq;
-using ItLabs.MyRecipes.Domain.Validations;
-using ItLabs.MyRecipes.Domain.Responses;
+using ItLabs.MyRecipes.Core.Validations;
+using ItLabs.MyRecipes.Core.Responses;
 using PagedList;
 using AutoMapper.QueryableExtensions;
 
-namespace ItLabs.MyRecipes.Domain.Managers
+namespace ItLabs.MyRecipes.Core.Managers
 {
     public class RecipeManager : IRecipeManager
     {
@@ -94,6 +94,7 @@ namespace ItLabs.MyRecipes.Domain.Managers
                 {
                     Recipe = recipe.Id == 0 ? dataRecipe : null,
                     Ingredient = dataIngredient,
+                    IngredientId = dataIngredient.Id,
                     Quantity = recipeIngredient.Quantity
                 });
             }
@@ -117,7 +118,17 @@ namespace ItLabs.MyRecipes.Domain.Managers
             var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
             return ingredients;
         }
+       public IEnumerable<Ingredient> SearchIngredients(string term)
+        {
+            var dbIngredients = _ingredientRepository.GetIngredients();
+            dbIngredients = dbIngredients.Where(x => x.Name.ToLower().StartsWith(term.ToLower()));
 
+            //dbIngredients= dbIngredients.Where(x => x.Name.ToLower().StartsWith(term.ToLower()))
+            //    .Select(e => e.Name).Distinct().ToList();
+
+            var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
+            return ingredients;
+        }
         public Ingredient GetIngredient(string name)
         {
             var dbIngredients = _ingredientRepository.GetIngredients();
