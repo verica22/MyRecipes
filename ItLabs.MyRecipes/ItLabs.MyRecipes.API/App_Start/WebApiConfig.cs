@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Autofac;
+using Autofac.Integration.WebApi;
+using ItLabs.MyRecipes.Core.DependencyInjection;
+using System.Reflection;
 using System.Web.Http;
 
 namespace ItLabs.MyRecipes.API
@@ -15,19 +16,12 @@ namespace ItLabs.MyRecipes.API
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-            name: "ActionApi",
-            routeTemplate: "{controller}/{action}/{id}",
-            defaults: new { id = RouteParameter.Optional }
-        );
-
-            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
-         
-
+            config.DependencyResolver = IoCConfig.RegisterWebApiDependencies(Assembly.GetExecutingAssembly());
         }
     }
 }

@@ -16,9 +16,9 @@ namespace ItLabs.MyRecipes.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
             IoCConfig.RegisterDependencies(typeof(MvcApplication).Assembly);
             AutomapperBootstrap.Initialize();
-
             FluentValidationModelValidatorProvider.Configure();
         }
     }

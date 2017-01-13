@@ -1,5 +1,8 @@
-﻿using FluentValidation.Mvc;
+﻿using Autofac;
+using Autofac.Integration.WebApi;
+using FluentValidation.Mvc;
 using ItLabs.MyRecipes.Core.Automapper;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -17,12 +20,8 @@ namespace ItLabs.MyRecipes.API
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-          // IoCConfig.RegisterDependencies(typeof(MvcApplication).Assembly);
             AutomapperBootstrap.Initialize();
-
-          FluentValidationModelValidatorProvider.Configure();
-
-           
+            FluentValidationModelValidatorProvider.Configure();
         }
     }
 }

@@ -50,9 +50,10 @@ namespace ItLabs.MyRecipes.Data.Repository
 
             if (recipe == null)
                 return;
-
+           
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
+            
         }
         public bool IsRecipeNameUnique(Recipe recipe, string name)
         {
