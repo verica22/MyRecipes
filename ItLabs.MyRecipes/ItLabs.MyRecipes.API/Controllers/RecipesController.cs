@@ -1,5 +1,6 @@
 ﻿using ItLabs.MyRecipes.Core;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 
@@ -16,31 +17,31 @@ namespace ItLabs.MyRecipes.API.Controllers
 
         }
         // GET /recipes
-        public IEnumerable<string> Get()
-
+        [HttpGet]
+        public IEnumerable<Recipe> GetRecipes()
         {
-            return new string[] { "value1", "value2" };
+            return _recipeManager.GetAll();
         }
 
         // GET /recipes/4
         // [HttpGet, Route("{id}")]
-        public IHttpActionResult Get(int id)
+        //public IHttpActionResult Get(int id)
+        //{
+        //    var recipe = _recipeManager.Get(id);
+        //    if (recipe == null)
+        //        return NotFound();
+        //    return Ok(recipe);
+        //}
+        [HttpGet, Route("{name}")]
+        public IHttpActionResult Get(string name)
         {
-            var recipe = _recipeManager.Get(id);
+            var recipe = _recipeManager.GetRecipe(name);
             if (recipe == null)
                 return NotFound();
-            return Ok(recipe);
+            return Ok();
         }
-       //[HttpGet, Route("{name}")]
-       // public IHttpActionResult Get(string name)
-       // {
-       //     //var recipe = _recipeManager.Get(name);
-       //     //if (recipe == null)
-       //     //    return NotFound();
-       //     return Ok();
-       // }
 
-        [AcceptVerbs("PUT", "POST")]
+        //[AcceptVerbs("PUT", "POST")]
         [HttpPost]
         public IHttpActionResult Post(Recipe recipe)
         {
@@ -49,44 +50,15 @@ namespace ItLabs.MyRecipes.API.Controllers
                 return Ok();
             return BadRequest();
         }
-        //public HttpResponseMessage Post(Recipe recipe)
-        //{
-        //    recipe = _recipeManager.SaveRecipe(recipe);
-        //    var response = Request.CreateResponse(HttpStatusCode.Created, recipe);
-
-        //    string uri = Url.Link("DefaultApi", new { id = recipe.Id });
-        //    response.Headers.Location = new Uri(uri);
-        //    return response;
-        //}
-        // [HttpPut]
-        //public IHttpActionResult Update(Recipe recipe)
-        //{
-        //    var isUpdated = _recipeManager.SaveRecipe(recipe.Id, recipe);
-        //    if (isUpdated == true)
-        //        return Ok();
-        //    return BadRequest();
-        //}
-
-        //[HttpDelete]
-        //public IHttpActionResult DeleteRecipe(int id)
-        //{
-        //    var isDeleted = _recipeManager.Remove(id);
-        //    if (isDeleted == true)
-        //        return Ok();
-        //    return BadRequest();
-        //}
-        //    public Recipe Delete(int id)
-        //    {
-        //        Recipe recipe;
-
-        //        if (!_recipeManager.Get(id))
-        //            throw new HttpResponseException(HttpStatusCode.NotFound);
-        //        _recipeManager.Remove(id);
-        //        return recipe;
-
-        //}
-
-        //[HttpDelete, Route("{id}")]
+        [HttpPut]
+        public IHttpActionResult Put(Recipe recipe)
+        {
+            var isSave = _recipeManager.SaveRecipe(recipe);
+            if (isSave.IsSuccessful)
+                return Ok();
+            return BadRequest();
+        }
+      
         [HttpDelete]
         public void Delete(int id)
         {

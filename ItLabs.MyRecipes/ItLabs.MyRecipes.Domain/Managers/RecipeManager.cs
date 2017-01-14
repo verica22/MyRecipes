@@ -6,6 +6,7 @@ using ItLabs.MyRecipes.Core.Validations;
 using ItLabs.MyRecipes.Core.Responses;
 using PagedList;
 using AutoMapper.QueryableExtensions;
+using System;
 
 namespace ItLabs.MyRecipes.Core.Managers
 {
@@ -26,8 +27,21 @@ namespace ItLabs.MyRecipes.Core.Managers
             var recipe = Mapper.Map<Recipe>(dbRecipe);
             return recipe;
         }
+        public Recipe GetRecipe(string name)
+        {
+            var dbRecipe = _recipeRepository.GetRecipeByName(name);
+            var recipe = Mapper.Map<Recipe>(dbRecipe);
+            return recipe;
+        }
+        public IEnumerable<Recipe> GetAll()
+        {
+            var dbRecipes = _recipeRepository.GetRecipes();
+          //  var recipes = dbRecipes.ProjectTo<Recipe>();
+            var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
+            return recipes;
+        }
 
-        public IPagedList<Recipe> Search(string name, bool isDone, bool isFavourite, int page, int pageSize = Core.Constants.DefaultPageSize)
+        public IPagedList<Recipe> Search(string name, bool isDone, bool isFavourite, int page, int pageSize = Constants.DefaultPageSize)
         {
             var dbRecipes = _recipeRepository.GetRecipes();
 
@@ -135,5 +149,7 @@ namespace ItLabs.MyRecipes.Core.Managers
             var ingredients = Mapper.Map<Ingredient>(dbIngredients);
             return ingredients;
         }
+
+  
     }
 }

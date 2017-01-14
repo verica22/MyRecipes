@@ -18,7 +18,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
             _recipeManager = recipeManager;
 
         }
-        
+
         public ActionResult Index(int? page)
         {
             var recipes = _recipeManager.Search(string.Empty, false, false, page.HasValue ? page.Value : 1);

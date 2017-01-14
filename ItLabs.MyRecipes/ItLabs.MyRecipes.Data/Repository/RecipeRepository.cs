@@ -1,6 +1,8 @@
 ﻿using ItLabs.MyRecipes.Data;
 using System.Data.Entity;
 using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
@@ -12,12 +14,19 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             _dbContext = new RecipeDBContext();
         }
-
+        //public IEnumerable<Recipe> GetAllRecipes()
+        //{
+        //    return _dbContext.Recipes.ToList();
+        //}
         public IQueryable<Recipe> GetRecipes()
         {
             return _dbContext.Recipes;
         }
-
+        public Recipe GetRecipeByName(string name)
+        {
+            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name == name);
+            return recipe;
+        }
         public Recipe GetRecipe(int id)
         {
             var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Id == id);
@@ -75,5 +84,7 @@ namespace ItLabs.MyRecipes.Data.Repository
             }
             return isUnique;
         }
+
+        
     }
 }
