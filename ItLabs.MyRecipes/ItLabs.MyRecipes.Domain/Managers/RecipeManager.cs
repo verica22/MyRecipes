@@ -117,7 +117,30 @@ namespace ItLabs.MyRecipes.Core.Managers
             return response;
         }
 
+        //public void AddIngredients(Recipe recipe)
+        //{
+        //    Data.Recipe dataRecipe;
+        //    foreach (var recipeIngredient in recipe.RecipeIngredients)
+        //    {
+        //        var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.IngredientName);
+        //        if (dataIngredient == null)
+        //        {
+        //            dataIngredient = new Data.Ingredient()
+        //            {
+        //                Name = recipeIngredient.IngredientName,
+        //                Measurement = recipeIngredient.Measurement
+        //            };
+        //        }
 
+        //        dataRecipe.RecipeIngredients.Add(new Data.RecipeIngredients
+        //        {
+        //            Recipe = recipe.Id == 0 ? dataRecipe : null,
+        //            Ingredient = dataIngredient,
+        //            IngredientId = dataIngredient.Id,
+        //            Quantity = recipeIngredient.Quantity
+        //        });
+        //    }
+        //}
         public void Remove(int id)
         {
             if (id == 0)
