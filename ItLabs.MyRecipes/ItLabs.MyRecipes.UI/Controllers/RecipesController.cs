@@ -70,7 +70,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                result = _recipeManager.SaveRecipe(recipe);
+                result = _recipeManager.Update(recipe);
                 status = true;
             }
 

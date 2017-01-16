@@ -12,9 +12,10 @@ namespace ItLabs.MyRecipes.Core
         IEnumerable<Recipe> GetAll();
         IPagedList<Recipe> Search(string name, bool isDone, bool isFavourite, int page, int pageSize = Core.Constants.DefaultPageSize);
 
-        ResponseBase SaveRecipe(Recipe recipe);
+        ResponseBase Add(Recipe recipe);
+        ResponseBase Update(Recipe recipe);
         void Remove(int Id);
-
+        
         IEnumerable<Ingredient> GetIngredients();
         IEnumerable<Ingredient> SearchIngredients(string name);
         Ingredient GetIngredient(string name);

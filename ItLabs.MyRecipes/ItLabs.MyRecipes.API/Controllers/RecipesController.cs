@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace ItLabs.MyRecipes.API.Controllers
 {
@@ -16,65 +17,87 @@ namespace ItLabs.MyRecipes.API.Controllers
             _recipeManager = recipeManager;
 
         }
-        // GET /recipes
-        ///<summary>
-        ///Get all recipes
-        ///</summary>
-        ///<remarks>
-        ///Get a list of all recipes
-        ///</remarks>
-        ///<returns></returns>
-        ///<response code="200"></response>
-        [HttpGet]
-        public IEnumerable<Recipe> GetRecipes()
-        {
-            return _recipeManager.GetAll();
-        }
-
-        // GET /recipes/4
-        // [HttpGet, Route("{id}")]
-        //public IHttpActionResult Get(int id)
+        //// GET /recipes
+        /////<summary>
+        /////Get all recipes
+        /////</summary>
+        /////<remarks>
+        /////Get a list of all recipes
+        /////</remarks>
+        /////<returns></returns>
+        /////<response code="200"></response>
+        ////[HttpGet, Route("{recipes}")]
+        //[HttpGet]
+        //[ActionName("GetRecipes")]
+        //[ResponseType(typeof(IEnumerable<Recipe>))]
+        //public IHttpActionResult GetRecipes()
         //{
-        //    var recipe = _recipeManager.Get(id);
+        //    var recipes = _recipeManager.GetAll();
+        //    if (recipes == null)
+        //        return BadRequest();
+        //    return Ok(recipes);
+        //}
+        /////<summary>
+        /////Get recipe 
+        /////</summary>
+        /////<remarks>
+        /////Get recipe by name
+        /////</remarks>
+        /////<returns></returns>
+        /////<response code="200"></response>
+        //[HttpGet, Route("Recipes/{name}")]
+        //// [Res]
+        //[ActionName("Get")]
+        //public IHttpActionResult Get(string name)
+        //{
+           
+        //    var recipe = _recipeManager.GetRecipe(name);
         //    if (recipe == null)
-        //        return NotFound();
+        //        return BadRequest();
         //    return Ok(recipe);
         //}
         ///<summary>
-        ///Get recipe 
+        ///Search recipe
         ///</summary>
         ///<remarks>
-        ///Get recipe by name
+        ///Search recipes by name, done, favourite and page
         ///</remarks>
         ///<returns></returns>
-        ///<response code="200"></response>
-        [HttpGet, Route("{name}")]
-        public IHttpActionResult Get(string name)
+        ///<response code="200">successful operation</response>
+        ///<description>
+        ///values that need to be considered for filter
+        ///</description>
+
+        [HttpGet, Route("Recipes/Search")]
+        [ActionName("Search")]
+        public IHttpActionResult Search([FromUri]string name, [FromUri]bool isDone, [FromUri]bool isFavourite, [FromUri] int? page)
         {
-            var recipe = _recipeManager.GetRecipe(name);
-            if (recipe == null)
+            var recipes = _recipeManager.Search(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
+            if (recipes.Count == 0)
                 return NotFound();
-            return Ok();
+            return Ok(recipes);
         }
 
-        //[AcceptVerbs("PUT", "POST")]
-        ///<summary>
+         ///<summary>
         ///Add new recipe 
         ///</summary>
         ///<remarks>
         ///Add new recipe
         ///</remarks>
         ///<returns></returns>
-        ///<response code="200"></response>
+        /// <response code="201">Returns the newly created recipe</response>
+        /// <response code="400">If the recipe is null</response>
         [HttpPost]
         public IHttpActionResult Post(Recipe recipe)
         {
-            var isSave = _recipeManager.SaveRecipe(recipe);
+            var isSave = _recipeManager.Add(recipe);
             if (isSave.IsSuccessful)
-                return Ok();
-            return BadRequest();
+                return Ok(recipe);
+            return BadRequest("Recipe was not successfully saved" + isSave.Errors[0]);
+            //return BadRequest("Recipe was not successfully saved");
+          //  return BadRequest();Errors = Count = 1
         }
-        //[AcceptVerbs("PUT", "POST")]
+       
         ///<summary>
         ///Update recipe 
         ///</summary>
@@ -84,13 +107,15 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///<returns></returns>
         ///<response code="200"></response>
         [HttpPut]
-        public IHttpActionResult Put(Recipe recipe)
+       // [Route("{name}")]
+        public IHttpActionResult Put(string name, [FromBody]Recipe recipe)
         {
-            var isSave = _recipeManager.SaveRecipe(recipe);
+            var isSave = _recipeManager.Update(recipe);
             if (isSave.IsSuccessful)
-                return Ok();
-            return BadRequest();
+                return Ok(recipe);
+            return BadRequest("Recipe was not successfully updated" + isSave.Errors[0]);
         }
+
         ///<summary>
         ///Delete recipe 
         ///</summary>
@@ -99,26 +124,22 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///</remarks>
         ///<returns></returns>
         ///<response code="200"></response>
-        [HttpDelete]
-        public void Delete(int id)
+        [HttpDelete, Route("Recipes/{id}")]
+        public IHttpActionResult Delete(int id)
         {
             Recipe item = _recipeManager.Get(id);
             if (item == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-             _recipeManager.Remove(id);
+            _recipeManager.Remove(id);
 
-            
+            return Ok(item);
+
         }
 
-        //public IHttpActionResult Search(string name, bool isDone, bool isFavourite, int? page)
-        //{
-        //    var recipes = _recipeManager.Search(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
-        //    if (recipes == null)
-        //        return NotFound();
-        //    return Ok(); 
-        //}
+
+        
 
 
     }

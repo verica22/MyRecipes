@@ -2,6 +2,7 @@ using System.Web.Http;
 using WebActivatorEx;
 using ItLabs.MyRecipes.API;
 using Swashbuckle.Application;
+using Swashbuckle.Swagger;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -32,7 +33,16 @@ namespace ItLabs.MyRecipes.API
                         // hold additional metadata for an API. Version and title are required but you can also provide
                         // additional fields by chaining methods off SingleApiVersion.
                         //
-                        c.SingleApiVersion("v1", "MyRecipes- API");
+                         c.SingleApiVersion("v1", "MyRecipes- API" );
+                        //c.SingleApiVersion(new Info
+                        //{
+                        //    version = "v1",
+                        //    title = "ToDo API",
+                        //    description = "A simple example ASP.NET Core Web API",
+                        //    termsOfService = "None"
+                        //    //Contact = new Contact { Name = "Shayne Boyer", Email = "", Url = "http://twitter.com/spboyer" },
+                        //    //License = new License { Name = "Use under LICX", Url = "http://url.com" }
+                        //});
                         c.IncludeXmlComments(string.Format(@"{0}\bin\ItLabs.MyRecipes.API.XML",
                           System.AppDomain.CurrentDomain.BaseDirectory));
 

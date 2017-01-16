@@ -15,11 +15,17 @@ namespace ItLabs.MyRecipes.API
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+           // config.Routes.MapHttpRoute(
+           //     name: "ActionApi",
+           //     routeTemplate: "{controller}/{action}/{id}",
+           //     defaults: new { id = RouteParameter.Optional }
+           //);
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+           
 
             config.DependencyResolver = IoCConfig.RegisterWebApiDependencies(Assembly.GetExecutingAssembly());
         }
