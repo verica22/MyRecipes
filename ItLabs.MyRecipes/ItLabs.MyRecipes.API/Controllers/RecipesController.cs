@@ -11,7 +11,6 @@ namespace ItLabs.MyRecipes.API.Controllers
     public class RecipesController : ApiController
     {
         public IRecipeManager _recipeManager { get; set; }
-
         public RecipesController(IRecipeManager recipeManager)
         {
             _recipeManager = recipeManager;
@@ -91,13 +90,20 @@ namespace ItLabs.MyRecipes.API.Controllers
         public IHttpActionResult Post(Recipe recipe)
         {
             var isSave = _recipeManager.Add(recipe);
+            var SaveError = "";
             if (isSave.IsSuccessful)
-                return Ok(recipe);
-            return BadRequest("Recipe was not successfully saved" + isSave.Errors[0]);
-            //return BadRequest("Recipe was not successfully saved");
-          //  return BadRequest();Errors = Count = 1
-        }
-       
+              return Ok(recipe);
+            else if (isSave.Errors.Count > 0)
+            {
+                foreach (var message in isSave.Errors)
+                {
+                    SaveError += message;
+                }
+            }
+            return BadRequest("Recipe was not successfully saved" + ", " + SaveError);
+         // return BadRequest("Recipe was not successfully saved" + isSave.Errors[0]);
+   }
+
         ///<summary>
         ///Update recipe 
         ///</summary>
@@ -110,10 +116,18 @@ namespace ItLabs.MyRecipes.API.Controllers
        // [Route("{name}")]
         public IHttpActionResult Put(string name, [FromBody]Recipe recipe)
         {
-            var isSave = _recipeManager.Update(recipe);
-            if (isSave.IsSuccessful)
+            var isUpdated = _recipeManager.Update(recipe);
+            var SaveError = "";
+            if (isUpdated.IsSuccessful)
                 return Ok(recipe);
-            return BadRequest("Recipe was not successfully updated" + isSave.Errors[0]);
+            else if (isUpdated.Errors.Count > 0)
+            {
+                foreach (var message in isUpdated.Errors)
+                {
+                    SaveError += message;
+                }
+            }
+            return BadRequest("Recipe was not successfully saved" + ", " + SaveError);
         }
 
         ///<summary>
@@ -139,7 +153,24 @@ namespace ItLabs.MyRecipes.API.Controllers
         }
 
 
-        
+        ///<summary>
+        ///Get ingredient
+        ///</summary>
+        ///<remarks>
+        ///Get ingredient by name
+        ///</remarks>
+        ///<returns></returns>
+        ///<response code="200"></response>
+        [HttpGet, Route("Ingredient/{name}")]
+        [ActionName("GetIngredient")]
+        public IHttpActionResult GetIngredient(string name)
+        {
+            var ingredient = _recipeManager.GetIngredient(name);
+            if (ingredient == null)
+                return BadRequest();
+            return Ok(ingredient);
+        }
+
 
 
     }

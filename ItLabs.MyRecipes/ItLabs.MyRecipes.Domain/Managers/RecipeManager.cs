@@ -37,7 +37,6 @@ namespace ItLabs.MyRecipes.Core.Managers
         {
             var dbRecipes = _recipeRepository.GetRecipes();
             var recipes = dbRecipes.ProjectTo<Recipe>();
-           // var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
             return recipes;
         }
 
@@ -78,7 +77,7 @@ namespace ItLabs.MyRecipes.Core.Managers
                     IsFavorite = recipe.IsFavorite
                 };
             AddIngredients(dataRecipe, recipe);
-           
+
             _recipeRepository.Save(dataRecipe);
             return response;
         }
@@ -107,6 +106,7 @@ namespace ItLabs.MyRecipes.Core.Managers
             _recipeRepository.Save(dataRecipe);
             return response;
         }
+      
         public void AddIngredients(Data.Recipe dataRecipe, Recipe recipe)
         {
            foreach (var recipeIngredient in recipe.RecipeIngredients)
@@ -148,17 +148,14 @@ namespace ItLabs.MyRecipes.Core.Managers
             var dbIngredients = _ingredientRepository.GetIngredients();
             dbIngredients = dbIngredients.Where(x => x.Name.ToLower().StartsWith(term.ToLower()));
 
-            //dbIngredients= dbIngredients.Where(x => x.Name.ToLower().StartsWith(term.ToLower()))
-            //    .Select(e => e.Name).Distinct().ToList();
-
             var ingredients = Mapper.Map<IEnumerable<Ingredient>>(dbIngredients);
             return ingredients;
         }
         public Ingredient GetIngredient(string name)
         {
-            var dbIngredients = _ingredientRepository.GetIngredients();
-            var ingredients = Mapper.Map<Ingredient>(dbIngredients);
-            return ingredients;
+            var dbIngredient = _ingredientRepository.GetIngredient(name);
+            var ingredient = Mapper.Map<Ingredient>(dbIngredient);
+            return ingredient;
         }
 
   

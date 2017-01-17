@@ -14,17 +14,14 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             _dbContext = new RecipeDBContext();
         }
-        //public IEnumerable<Recipe> GetAllRecipes()
-        //{
-        //    return _dbContext.Recipes.ToList();
-        //}
+      
         public IQueryable<Recipe> GetRecipes()
         {
             return _dbContext.Recipes;
         }
         public Recipe GetRecipeByName(string name)
         {
-            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name == name);
+            var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
             return recipe;
         }
         public Recipe GetRecipe(int id)
@@ -64,10 +61,11 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.SaveChanges();
             
         }
-        public bool IsRecipeNameUnique(Recipe recipe, string name)
+        public bool IsRecipeNameUnique(string name)
         {
             //var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
             //return (recipe == null);
+
             bool isUnique = false;
             Recipe recipeName;
             using (_dbContext)
@@ -80,7 +78,8 @@ namespace ItLabs.MyRecipes.Data.Repository
             }
             else
             {
-                isUnique = recipeName.Id == recipe.Id;
+                //isUnique = recipeName.Id == recipe.Id;
+                isUnique = false;
             }
             return isUnique;
         }

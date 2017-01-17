@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using ItLabs.MyRecipes.Data;
-using System.Linq;
 using ItLabs.MyRecipes.Data.Repository;
+using System.Linq;
 
 namespace ItLabs.MyRecipes.Core.Validations
 {
-   
+
     public class RecipeValidator : AbstractValidator<Recipe>
     {
         public IRecipeRepository _recipeRepository { get; set; }
@@ -24,39 +24,49 @@ namespace ItLabs.MyRecipes.Core.Validations
                 .WithMessage("Recipe Name is required")
                 .Length(4, 100)
                 .WithMessage("Recipe Name must be at least 4 characters");
-                //.Must(IsRecipeNameUnique)
-                //.WithMessage("This Recipe name already exist");
+
+            RuleFor(x => x.Name).Must(IsRecipeNameUnique)
+                .WithMessage("This Recipe name already exist");
 
             RuleFor(x => x.RecipeIngredients)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Please add ingredients");
 
-       }
-
-        //use repository call here 
-        private bool IsRecipeNameUnique(Data.Recipe recipe, string name)
+        }
+        public bool IsRecipeNameUnique(string name)
         {
-            //bool isUnique = false;
-            //Data.Recipe recipeName;
-            //using (RecipeDBContext db = new RecipeDBContext())
-            //{
-            //    recipeName = db.Recipes.FirstOrDefault(x => x.Name == name);
-            //}
-            //if (recipeName == null)
-            //{
-            //    isUnique = true;
-            //}
-            //else
-            //{
-            //    isUnique = recipeName.Id == recipe.Id;
-            //}
-            //return isUnique;
-
-
-            bool isUnique = _recipeRepository.IsRecipeNameUnique(recipe, name);
+            bool isUnique = false;
+            var recipe = _recipeRepository.GetRecipeByName(name);
+            if (recipe == null)
+                { isUnique = true; }
+            else
+                { isUnique = false; }
             return isUnique;
         }
+        //use repository call here 
+        //private bool IsRecipeNameUnique(Recipe recipe, string name)
+        //{
+        //    //bool isUnique = false;
+        //    //Data.Recipe recipeName;
+        //    //using (RecipeDBContext db = new RecipeDBContext())
+        //    //{
+        //    //    recipeName = db.Recipes.FirstOrDefault(x => x.Name == name);
+        //    //}
+        //    //if (recipeName == null)
+        //    //{
+        //    //    isUnique = true;
+        //    //}
+        //    //else
+        //    //{
+        //    //    isUnique = recipeName.Id == recipe.Id;
+        //    //}
+        //    return isUnique;
+
+
+        //    //bool isUnique = _recipeRepository.IsRecipeNameUnique(recipe, name);
+        //    //return isUnique;
+        //}
 
     }
 

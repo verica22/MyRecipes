@@ -17,11 +17,7 @@ namespace ItLabs.MyRecipes.Data.Repository
         {
             return _dbContext.Ingredients.ToList();
         }
-        //public IEnumerable<Ingredient> SearchIngredients(string name)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+      
         public Ingredient GetIngredient(string name)
         {
             var ingredient = _dbContext.Ingredients.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
