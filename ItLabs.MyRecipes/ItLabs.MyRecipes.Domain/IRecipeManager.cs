@@ -7,17 +7,17 @@ namespace ItLabs.MyRecipes.Core
 {
     public interface IRecipeManager
     {
-        Recipe Get(int Id);
-        Recipe GetRecipe(string name);
+        Recipe GetRecipeById(int id);
+        Recipe GetRecipeByName(string name);
         IEnumerable<Recipe> GetAll();
-        IPagedList<Recipe> Search(string name, bool isDone, bool isFavourite, int page, int pageSize = Core.Constants.DefaultPageSize);
+        IPagedList<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite, int page, int pageSize = Constants.DefaultPageSize);
 
-        ResponseBase Add(Recipe recipe);
+        RecipeResponse Create(Recipe recipe);
         ResponseBase Update(Recipe recipe);
-        void Remove(int Id);
+        void Remove(string name);
         
         IEnumerable<Ingredient> GetIngredients();
-        IEnumerable<Ingredient> SearchIngredients(string name);
         Ingredient GetIngredient(string name);
+        IEnumerable<Ingredient> SearchIngredients(string name);
     }
 }

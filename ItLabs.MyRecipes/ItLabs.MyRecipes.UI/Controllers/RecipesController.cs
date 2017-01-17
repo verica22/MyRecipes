@@ -21,13 +21,13 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
         public ActionResult Index(int? page)
         {
-            var recipes = _recipeManager.Search(string.Empty, false, false, page.HasValue ? page.Value : 1);
+            var recipes = _recipeManager.SearchRecipes(string.Empty, false, false, page.HasValue ? page.Value : 1);
             return View(recipes);
         }
         [HttpPost]
         public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
         {
-            var recipes = _recipeManager.Search(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
+            var recipes = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
             return View(recipes);
         }
 
@@ -38,7 +38,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Recipe recipe = _recipeManager.Get(Convert.ToInt32(id));
+            Recipe recipe = _recipeManager.GetRecipeById(Convert.ToInt32(id));
             if (recipe == null)
             {
                 return HttpNotFound();
@@ -58,7 +58,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
         public ActionResult Remove(int Id)
         {
 
-            _recipeManager.Remove(Id);
+            //_recipeManager.Remove(Id);
             return RedirectToAction("Index");
         }
 
@@ -82,7 +82,7 @@ namespace ItLabs.MyRecipes.UI.Controllers
         {
             if (id == 0)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            Recipe recipe = _recipeManager.Get(id);
+            Recipe recipe = _recipeManager.GetRecipeById(id);
             if (recipe == null)
                 return HttpNotFound();
             return View(recipe);

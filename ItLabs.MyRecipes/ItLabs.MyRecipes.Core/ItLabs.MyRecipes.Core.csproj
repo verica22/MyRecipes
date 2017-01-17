@@ -41,8 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\Ingredient.cs" />
+    <Compile Include="Contracts\Recipe.cs" />
+    <Compile Include="Contracts\RecipeIngredient.cs" />
     <Compile Include="Enums\Measurement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Responses\RecipeResponse.cs" />
     <Compile Include="Responses\ResponseBase.cs" />
   </ItemGroup>
   <ItemGroup>

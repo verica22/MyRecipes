@@ -16,45 +16,7 @@ namespace ItLabs.MyRecipes.API.Controllers
             _recipeManager = recipeManager;
 
         }
-        //// GET /recipes
-        /////<summary>
-        /////Get all recipes
-        /////</summary>
-        /////<remarks>
-        /////Get a list of all recipes
-        /////</remarks>
-        /////<returns></returns>
-        /////<response code="200"></response>
-        ////[HttpGet, Route("{recipes}")]
-        //[HttpGet]
-        //[ActionName("GetRecipes")]
-        //[ResponseType(typeof(IEnumerable<Recipe>))]
-        //public IHttpActionResult GetRecipes()
-        //{
-        //    var recipes = _recipeManager.GetAll();
-        //    if (recipes == null)
-        //        return BadRequest();
-        //    return Ok(recipes);
-        //}
-        /////<summary>
-        /////Get recipe 
-        /////</summary>
-        /////<remarks>
-        /////Get recipe by name
-        /////</remarks>
-        /////<returns></returns>
-        /////<response code="200"></response>
-        //[HttpGet, Route("Recipes/{name}")]
-        //// [Res]
-        //[ActionName("Get")]
-        //public IHttpActionResult Get(string name)
-        //{
-           
-        //    var recipe = _recipeManager.GetRecipe(name);
-        //    if (recipe == null)
-        //        return BadRequest();
-        //    return Ok(recipe);
-        //}
+      
         ///<summary>
         ///Search recipe
         ///</summary>
@@ -67,17 +29,18 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///values that need to be considered for filter
         ///</description>
 
-        [HttpGet, Route("Recipes/Search")]
+        [HttpGet, Route("Recipes")]
         [ActionName("Search")]
-        public IHttpActionResult Search([FromUri]string name, [FromUri]bool isDone, [FromUri]bool isFavourite, [FromUri] int? page)
+        public IHttpActionResult Search([FromUri]string name, [FromUri]bool isDone, [FromUri]bool isFavourite, [FromUri] int? page, [FromUri] int? pageSize)
         {
-            var recipes = _recipeManager.Search(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
+            var recipes = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue ? page.Value : 1,
+                pageSize.HasValue ? pageSize.Value : Constants.DefaultPageSize);
             if (recipes.Count == 0)
                 return NotFound();
             return Ok(recipes);
         }
 
-         ///<summary>
+        ///<summary>
         ///Add new recipe 
         ///</summary>
         ///<remarks>
@@ -89,20 +52,16 @@ namespace ItLabs.MyRecipes.API.Controllers
         [HttpPost]
         public IHttpActionResult Post(Recipe recipe)
         {
-            var isSave = _recipeManager.Add(recipe);
-            var SaveError = "";
-            if (isSave.IsSuccessful)
-              return Ok(recipe);
-            else if (isSave.Errors.Count > 0)
+            var response = _recipeManager.Create(recipe);
+
+            if (!response.IsSuccessful || response.Recipe == null)
             {
-                foreach (var message in isSave.Errors)
-                {
-                    SaveError += message;
-                }
+                var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
+                return BadRequest(errorMessage);
             }
-            return BadRequest("Recipe was not successfully saved" + ", " + SaveError);
-         // return BadRequest("Recipe was not successfully saved" + isSave.Errors[0]);
-   }
+
+            return Ok(response.Recipe);
+        }
 
         ///<summary>
         ///Update recipe 
@@ -113,7 +72,7 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///<returns></returns>
         ///<response code="200"></response>
         [HttpPut]
-       // [Route("{name}")]
+        // [Route("{name}")]
         public IHttpActionResult Put(string name, [FromBody]Recipe recipe)
         {
             var isUpdated = _recipeManager.Update(recipe);
@@ -138,20 +97,17 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///</remarks>
         ///<returns></returns>
         ///<response code="200"></response>
-        [HttpDelete, Route("Recipes/{id}")]
-        public IHttpActionResult Delete(int id)
+        [HttpDelete, Route("Recipes/{name}")]
+        public IHttpActionResult Delete(string name)
         {
-            Recipe item = _recipeManager.Get(id);
-            if (item == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-            _recipeManager.Remove(id);
+            var recipe = _recipeManager.GetRecipeByName(name);
+            if (recipe == null)
+                return NotFound();
 
-            return Ok(item);
+            _recipeManager.Remove(name);
 
+            return Ok(true);
         }
-
 
         ///<summary>
         ///Get ingredient
@@ -170,8 +126,5 @@ namespace ItLabs.MyRecipes.API.Controllers
                 return BadRequest();
             return Ok(ingredient);
         }
-
-
-
     }
 }

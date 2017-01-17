@@ -1,8 +1,5 @@
-﻿using ItLabs.MyRecipes.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System;
-using System.Collections.Generic;
 
 namespace ItLabs.MyRecipes.Data.Repository
 {
@@ -24,20 +21,20 @@ namespace ItLabs.MyRecipes.Data.Repository
             var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
             return recipe;
         }
-        public Recipe GetRecipe(int id)
+        public Recipe GetRecipeById(int id)
         {
             var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Id == id);
             return recipe;
         }
 
-        public void Save(Recipe recipe)
+        public Recipe Save(Recipe recipe)
         {
             if (recipe == null)
-                return;
+                return null;
 
             if (recipe.Id == 0)
             {
-                _dbContext.Recipes.Add(recipe);
+                recipe = _dbContext.Recipes.Add(recipe);
             }
             else
             {
@@ -45,45 +42,21 @@ namespace ItLabs.MyRecipes.Data.Repository
             }
 
             _dbContext.SaveChanges();
+            return recipe;
         }
 
-        public void Remove(int id)
+        public void Remove(string name)
         {
-            if (id == 0)
+            if (string.IsNullOrEmpty(name))
                 return;
 
-            var recipe = GetRecipe(id);
+            var recipe = GetRecipeByName(name);
 
             if (recipe == null)
                 return;
            
             _dbContext.Recipes.Remove(recipe);
             _dbContext.SaveChanges();
-            
         }
-        public bool IsRecipeNameUnique(string name)
-        {
-            //var recipe = _dbContext.Recipes.SingleOrDefault(x => x.Name.ToLower() == name.ToLower());
-            //return (recipe == null);
-
-            bool isUnique = false;
-            Recipe recipeName;
-            using (_dbContext)
-            {
-                recipeName = _dbContext.Recipes.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
-            }
-            if (recipeName == null)
-            {
-                isUnique = true;
-            }
-            else
-            {
-                //isUnique = recipeName.Id == recipe.Id;
-                isUnique = false;
-            }
-            return isUnique;
-        }
-
-        
     }
 }
