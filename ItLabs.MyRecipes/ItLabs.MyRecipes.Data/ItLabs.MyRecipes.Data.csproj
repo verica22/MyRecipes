@@ -60,9 +60,9 @@
   <ItemGroup>
     <Compile Include="EntityFramework\Ingredient.cs" />
     <Compile Include="EntityFramework\RecipeIngredients.cs" />
-    <Compile Include="Migrations\201701051209136_NewDatabase.cs" />
-    <Compile Include="Migrations\201701051209136_NewDatabase.Designer.cs">
-      <DependentUpon>201701051209136_NewDatabase.cs</DependentUpon>
+    <Compile Include="Migrations\201701171437499_NewMigration.cs" />
+    <Compile Include="Migrations\201701171437499_NewMigration.Designer.cs">
+      <DependentUpon>201701171437499_NewMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,15 +79,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201701051209136_NewDatabase.resx">
-      <DependentUpon>201701051209136_NewDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ItLabs.MyRecipes.Core\ItLabs.MyRecipes.Core.csproj">
       <Project>{e48def98-97f5-443c-8991-92cbaf3aa429}</Project>
       <Name>ItLabs.MyRecipes.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201701171437499_NewMigration.resx">
+      <DependentUpon>201701171437499_NewMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

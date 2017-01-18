@@ -4,9 +4,10 @@ using AutoMapper;
 using System.Linq;
 using ItLabs.MyRecipes.Core.Validations;
 using ItLabs.MyRecipes.Core.Responses;
-using PagedList;
 using AutoMapper.QueryableExtensions;
+using ItLabs.MyRecipes.Core.Requests;
 using System;
+using ItLabs.MyRecipes.Domain.Validations;
 
 namespace ItLabs.MyRecipes.Core.Managers
 {
@@ -39,65 +40,80 @@ namespace ItLabs.MyRecipes.Core.Managers
             var recipes = dbRecipes.ProjectTo<Recipe>();
             return recipes;
         }
+       
+        public SearchResponse SearchRecipes(SearchRequest search)
+         {
+            var response = new SearchResponse();
+            var validationResult = new SearchValidator().Validate(search);
+            if (!validationResult.IsValid)
+            {
+                response.IsSuccessful = false;
+                response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                           return response;
+            }
 
-        //request for these parameters and validator for that request
-        public IPagedList<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite, int page, int pageSize = Constants.DefaultPageSize)
-        {
             var dbRecipes = _recipeRepository.GetRecipes();
 
-            if (!string.IsNullOrEmpty(name))
-                dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(name.ToLower()));
+            if (!string.IsNullOrEmpty(search.Name))
+                dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(search.Name.ToLower()));
 
-            if (isDone)
+            if (search.IsDone)
                 dbRecipes = dbRecipes.Where(x => x.IsDone);
 
-            if (isFavourite)
+            if (search.IsFavorite)
                 dbRecipes = dbRecipes.Where(x => x.IsFavorite);
 
             var recipes = dbRecipes.ProjectTo<Recipe>();
-            return recipes.OrderBy(x => x.Name).ToPagedList(page, pageSize);
+            
+            response.Recipes = recipes;
+
+           // return recipes.OrderBy(x => x.Name).ToPagedList(search.page, search.pageSize);
+            return response;
         }
 
-        public RecipeResponse Create(Recipe recipe)
+        public RecipeResponse Create(RecipeRequest recipe)
         {
             var response = new RecipeResponse();
-
-            var validationResult = new RecipeValidator().Validate(recipe);
+            var dbrecipe = Mapper.Map<Recipe>(recipe);
+            var validationResult = new RecipeValidator().Validate(dbrecipe);
             if (!validationResult.IsValid)
             {
                 response.IsSuccessful = false;
                 response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
                 return response;
             }
-
-            //check if recipe
-            var existingRecipe = _recipeRepository.GetRecipeByName(recipe.Name);
+            var existingRecipe = _recipeRepository.GetRecipeByName(dbrecipe.Name);
             if(existingRecipe != null)
             {
                 response.IsSuccessful = false;
                 response.Errors.Add("Recipe already exists");
                 return response;
             }
-
+             DateTime time = DateTime.Now;
+            string format = "yyyy-MM-dd HH:MM:ss";
             Data.Recipe dataRecipe = new Data.Recipe
             {
+
                 Name = recipe.Name,
                 Description = recipe.Description,
                 IsDone = recipe.IsDone,
-                IsFavorite = recipe.IsFavorite
+                IsFavorite = recipe.IsFavorite,
+                DateCreated = time,//.ToString(format),
+                DateModified = null
             };
 
-            AddIngredients(dataRecipe, recipe);
+            AddIngredients(dataRecipe, recipe, isNewRecipe: true);
 
             response.Recipe = Mapper.Map<Recipe>(_recipeRepository.Save(dataRecipe));
             return response;
         }
-        public ResponseBase Update(Recipe recipe)
+        public ResponseBase Update(string name,RecipeRequest recipe)
         {
             var response = new ResponseBase();
 
             var validator = new RecipeValidator();
-            var validationResult = validator.Validate(recipe);
+            var dbrecipe = Mapper.Map<Recipe>(recipe);
+            var validationResult = validator.Validate(dbrecipe);
 
             if (!validationResult.IsValid)
             {
@@ -106,36 +122,40 @@ namespace ItLabs.MyRecipes.Core.Managers
                 return response;
             }
 
-            Data.Recipe dataRecipe = _recipeRepository.GetRecipeById(recipe.Id);
-            dataRecipe.Name = recipe.Name;
-            dataRecipe.Description = recipe.Description;
-            dataRecipe.IsDone = recipe.IsDone;
-            dataRecipe.IsFavorite = recipe.IsFavorite;
+            Data.Recipe dataRecipe = _recipeRepository.GetRecipeByName(name);
+                dataRecipe.Name = recipe.Name;
+                dataRecipe.Description = recipe.Description;
+                dataRecipe.IsDone = recipe.IsDone;
+                dataRecipe.IsFavorite = recipe.IsFavorite;
+                dataRecipe.DateModified = DateTime.Now;
 
-            AddIngredients(dataRecipe, recipe);
-
-            _recipeRepository.Save(dataRecipe);
+                AddIngredients(dataRecipe, recipe, isNewRecipe: false);
+                _recipeRepository.Save(dataRecipe);
+            
+           
             return response;
         }
 
-        public void AddIngredients(Data.Recipe dataRecipe, Recipe recipe)
+        public void AddIngredients(Data.Recipe dataRecipe, RecipeRequest recipe, bool isNewRecipe)
         {
-            foreach (var recipeIngredient in recipe.RecipeIngredients)
+            foreach (var recipeIngredient in recipe.Ingredients)
             {
-                var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.IngredientName);
+                var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.Name);
                 if (dataIngredient == null)
                 {
                     dataIngredient = new Data.Ingredient()
                     {
-                        Name = recipeIngredient.IngredientName,
-                        Measurement = recipeIngredient.Measurement
+                        Name = recipeIngredient.Name,
+                        Measurement = recipeIngredient.Measurement.ToString(),
+                        DateCreated = DateTime.Now,
+                        
                     };
                 }
 
                 dataRecipe.RecipeIngredients.Add(new Data.RecipeIngredients
                 {
-                    Recipe = recipe.Id == 0 ? dataRecipe : null,
-                    Ingredient = dataIngredient,
+                    Recipe = isNewRecipe ? dataRecipe : null,
+                    Ingredient = dataIngredient.Id == 0 ? dataIngredient : null,
                     IngredientId = dataIngredient.Id,
                     Quantity = recipeIngredient.Quantity
                 });

@@ -1,7 +1,7 @@
-﻿using ItLabs.MyRecipes.Core.Responses;
+﻿using ItLabs.MyRecipes.Core.Requests;
+using ItLabs.MyRecipes.Core.Responses;
 using PagedList;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ItLabs.MyRecipes.Core
 {
@@ -10,10 +10,10 @@ namespace ItLabs.MyRecipes.Core
         Recipe GetRecipeById(int id);
         Recipe GetRecipeByName(string name);
         IEnumerable<Recipe> GetAll();
-        IPagedList<Recipe> SearchRecipes(string name, bool isDone, bool isFavourite, int page, int pageSize = Constants.DefaultPageSize);
-
-        RecipeResponse Create(Recipe recipe);
-        ResponseBase Update(Recipe recipe);
+        
+        SearchResponse SearchRecipes(SearchRequest search);
+        RecipeResponse Create(RecipeRequest recipe);
+        ResponseBase Update(string name,RecipeRequest recipe);
         void Remove(string name);
         
         IEnumerable<Ingredient> GetIngredients();

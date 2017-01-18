@@ -12,6 +12,7 @@ namespace ItLabs.MyRecipes.Data
 
         public virtual Recipe Recipe { get; set; }
         public virtual Ingredient Ingredient { get; set; }
+
        
         public int Quantity { get; set; }
     }

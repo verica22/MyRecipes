@@ -1,9 +1,7 @@
 ﻿using ItLabs.MyRecipes.Core;
-using System.Collections.Generic;
+using ItLabs.MyRecipes.Core.Requests;
 using System.Linq;
-using System.Net;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ItLabs.MyRecipes.API.Controllers
 {
@@ -14,9 +12,7 @@ namespace ItLabs.MyRecipes.API.Controllers
         public RecipesController(IRecipeManager recipeManager)
         {
             _recipeManager = recipeManager;
-
         }
-      
         ///<summary>
         ///Search recipe
         ///</summary>
@@ -25,21 +21,23 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///</remarks>
         ///<returns></returns>
         ///<response code="200">successful operation</response>
+        ///<response code="400">If the recipe is not found</response>
         ///<description>
         ///values that need to be considered for filter
         ///</description>
-
         [HttpGet, Route("Recipes")]
         [ActionName("Search")]
-        public IHttpActionResult Search([FromUri]string name, [FromUri]bool isDone, [FromUri]bool isFavourite, [FromUri] int? page, [FromUri] int? pageSize)
+        public IHttpActionResult Search([FromUri]SearchRequest search)
         {
-            var recipes = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue ? page.Value : 1,
-                pageSize.HasValue ? pageSize.Value : Constants.DefaultPageSize);
-            if (recipes.Count == 0)
-                return NotFound();
-            return Ok(recipes);
+            var response = _recipeManager.SearchRecipes(search);
+            //var recipes = _recipeManager.SearchRecipes((name, isDone, isFavourite, page.HasValue? page.Value : 1,pageSize.HasValue? pageSize.Value: Constants.DefaultPageSize);
+            if (!response.IsSuccessful || response.Errors.Count > 0)
+            {
+                var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
+                return BadRequest(errorMessage);
+            }
+              return Ok(response.Recipes);
         }
-
         ///<summary>
         ///Add new recipe 
         ///</summary>
@@ -49,20 +47,18 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///<returns></returns>
         /// <response code="201">Returns the newly created recipe</response>
         /// <response code="400">If the recipe is null</response>
-        [HttpPost]
-        public IHttpActionResult Post(Recipe recipe)
+        [HttpPost, Route("Recipes")]
+        [ActionName("Post")]
+        public IHttpActionResult Post(RecipeRequest recipe)
         {
             var response = _recipeManager.Create(recipe);
-
             if (!response.IsSuccessful || response.Recipe == null)
             {
                 var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
                 return BadRequest(errorMessage);
             }
-
             return Ok(response.Recipe);
         }
-
         ///<summary>
         ///Update recipe 
         ///</summary>
@@ -70,25 +66,20 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///Update an existing recipe
         ///</remarks>
         ///<returns></returns>
-        ///<response code="200"></response>
-        [HttpPut]
-        // [Route("{name}")]
-        public IHttpActionResult Put(string name, [FromBody]Recipe recipe)
+        ///<response code="200">Returns updated recipe</response>
+        ///<response code="400">If the recipe is null</response>
+        [HttpPut, Route("Recipes")]
+        [ActionName("Post")]
+        public IHttpActionResult Put(string name, [FromBody]RecipeRequest recipe)
         {
-            var isUpdated = _recipeManager.Update(recipe);
-            var SaveError = "";
-            if (isUpdated.IsSuccessful)
-                return Ok(recipe);
-            else if (isUpdated.Errors.Count > 0)
+            var response = _recipeManager.Update(name,recipe);
+            if (!response.IsSuccessful )
             {
-                foreach (var message in isUpdated.Errors)
-                {
-                    SaveError += message;
-                }
+                var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
+                return BadRequest(errorMessage);
             }
-            return BadRequest("Recipe was not successfully saved" + ", " + SaveError);
-        }
-
+            return Ok(recipe);
+       }
         ///<summary>
         ///Delete recipe 
         ///</summary>
@@ -96,19 +87,17 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///Delete recipe
         ///</remarks>
         ///<returns></returns>
-        ///<response code="200"></response>
+        ///<response code="200">Returns deleted recipe</response>
+        ///<response code="400">If the recipe is null</response>
         [HttpDelete, Route("Recipes/{name}")]
         public IHttpActionResult Delete(string name)
         {
             var recipe = _recipeManager.GetRecipeByName(name);
             if (recipe == null)
-                return NotFound();
-
+                return BadRequest("This recipe was not found");
             _recipeManager.Remove(name);
-
-            return Ok(true);
+            return Ok(name + " was successfully deleted");
         }
-
         ///<summary>
         ///Get ingredient
         ///</summary>
@@ -116,15 +105,16 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///Get ingredient by name
         ///</remarks>
         ///<returns></returns>
-        ///<response code="200"></response>
-        [HttpGet, Route("Ingredient/{name}")]
-        [ActionName("GetIngredient")]
-        public IHttpActionResult GetIngredient(string name)
+        ///<response code="200">successful operation</response>
+        ///<response code="400">Ingredient was not found</response>
+        [HttpGet, Route("Ingredient")]
+        [ActionName("GetIngredientNames")]
+        public IHttpActionResult GetIngredientNames(string name)
         {
-            var ingredient = _recipeManager.GetIngredient(name);
-            if (ingredient == null)
-                return BadRequest();
-            return Ok(ingredient);
+            var response = _recipeManager.SearchIngredients(name);
+            if (response == null)
+                return BadRequest("This ingredient was not found");
+            return Ok(response);
         }
     }
 }

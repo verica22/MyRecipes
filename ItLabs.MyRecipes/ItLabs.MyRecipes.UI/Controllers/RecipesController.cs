@@ -19,17 +19,17 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
         }
 
-        public ActionResult Index(int? page)
-        {
-            var recipes = _recipeManager.SearchRecipes(string.Empty, false, false, page.HasValue ? page.Value : 1);
-            return View(recipes);
-        }
+        //public ActionResult Index(int? page)
+        //{
+        //    var recipes = _recipeManager.SearchRecipes(string.Empty, false, false, page.HasValue ? page.Value : 1);
+        //    return View(recipes);
+        //}
         [HttpPost]
-        public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
-        {
-            var recipes = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
-            return View(recipes);
-        }
+        //public ActionResult Search(string name, bool isDone, bool isFavourite, int? page)
+        //{
+        //    var recipes = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue ? page.Value : 1);
+        //    return View(recipes);
+        //}
 
         ////GET: Detail
         public ActionResult Details(int? id)
@@ -70,7 +70,8 @@ namespace ItLabs.MyRecipes.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                result = _recipeManager.Update(recipe);
+                
+               // result = _recipeManager.Update(recipe);
                 status = true;
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ItLabs.MyRecipes.Data
@@ -18,7 +19,8 @@ namespace ItLabs.MyRecipes.Data
         public string Description { get; set; }
         public bool IsDone { get; set; }
         public bool IsFavorite { get; set; }
-
+        public DateTime? DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
         public virtual ICollection<RecipeIngredients> RecipeIngredients { get; set; }
     }
 }
