@@ -73,16 +73,14 @@ namespace ItLabs.MyRecipes.Core.Managers
             return response;
         }
 
-        //valudator za recipe request
-        public RecipeResponse Create(RecipeRequest recipe)
+          public RecipeResponse Create(RecipeRequest recipe)
         {
             var response = new RecipeResponse();
 
             if (recipe == null)
                 recipe = new RecipeRequest();
 
-            var dbrecipe = Mapper.Map<Recipe>(recipe);
-            var validationResult = new RecipeValidator().Validate(dbrecipe);
+            var validationResult = new RecipeRequestValidator().Validate(recipe);
             if (!validationResult.IsValid)
             {
                 response.IsSuccessful = false;
@@ -90,7 +88,7 @@ namespace ItLabs.MyRecipes.Core.Managers
                 return response;
             }
 
-            var existingRecipe = _recipeRepository.GetRecipeByName(dbrecipe.Name);
+            var existingRecipe = _recipeRepository.GetRecipeByName(recipe.Name);
             if (existingRecipe != null)
             {
                 response.IsSuccessful = false;
@@ -121,9 +119,8 @@ namespace ItLabs.MyRecipes.Core.Managers
             if (recipe == null)
                 recipe = new RecipeRequest();
 
-            var validator = new RecipeValidator();
-            var dbrecipe = Mapper.Map<Recipe>(recipe);
-            var validationResult = validator.Validate(dbrecipe);
+            var validator = new RecipeRequestValidator();
+            var validationResult = validator.Validate(recipe);
             if (!validationResult.IsValid)
             {
                 response.IsSuccessful = false;
@@ -144,6 +141,17 @@ namespace ItLabs.MyRecipes.Core.Managers
             dataRecipe.IsDone = recipe.IsDone;
             dataRecipe.IsFavorite = recipe.IsFavorite;
             dataRecipe.DateModified = DateTime.Now;
+
+            // var dbRecipeIngredients = _ingredientRepository.GetRecipeIngredients();
+            //if (dataRecipe.Id !=0)
+            //    dbRecipeIngredients = dbRecipeIngredients.Where(x => x.RecipeId.Equals(dataRecipe.Id));
+
+            // foreach (var recipeIngredient in dbRecipeIngredients)
+            //foreach (var recipeIngredient in dataRecipe.RecipeIngredients)
+            //{
+            //    _ingredientRepository.Remove(recipeIngredient.Ingredient.Name);
+            //   //_ingredientRepository.Remove(recipeIngredient.RecipeId);
+            //}
 
             AddIngredients(dataRecipe, recipe, isNewRecipe: false);
             _recipeRepository.Save(dataRecipe);

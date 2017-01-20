@@ -52,7 +52,30 @@ namespace ItLabs.MyRecipes.Data.Repository
             _dbContext.Ingredients.Remove(ingredient);
             _dbContext.SaveChanges();
         }
+        //public void Remove(int id)
+        //{
+        //    if (id==0)
+        //        return;
 
-       
+        //    var recipeIngredient = GetRecipeIngredient(id);
+
+        //    if (recipeIngredient == null)
+        //        return;
+
+        //    _dbContext.RecipeIngredients.Remove(recipeIngredient);
+        //    _dbContext.SaveChanges();
+        //}
+        public IQueryable<RecipeIngredients> GetRecipeIngredients()
+        {
+            return _dbContext.RecipeIngredients;
+        }
+        //public RecipeIngredients GetRecipeIngredient(int id)
+        //{
+        //    var recipeIngredients = _dbContext.RecipeIngredients.SingleOrDefault(x => x.RecipeId == id);
+        //    return recipeIngredients;
+        //}
+
+
+
     }
 }

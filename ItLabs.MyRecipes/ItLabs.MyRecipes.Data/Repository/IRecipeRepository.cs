@@ -9,5 +9,6 @@ namespace ItLabs.MyRecipes.Data.Repository
         Recipe GetRecipeById(int id);
         Recipe Save(Recipe recipe);
         void Remove(string name);
+            
     }
 }

@@ -14,7 +14,7 @@ namespace ItLabs.MyRecipes.Core.Validations
                 .WithMessage("Recipe Name is required")
                 .Length(4, 100)
                 .WithMessage("Recipe Name must be at least 4 characters")
-                .Matches("[a-zA-Z ']*$")
+                .Matches("^[a-zA-Z ']*$")
                 .WithMessage("Recipe Name must contain characters and spaces only");
 
             RuleFor(x => x.Description)

@@ -35,7 +35,7 @@ namespace ItLabs.MyRecipes.API.Controllers
                 var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
                 return BadRequest(errorMessage);
             }
-              return Ok(response.Recipes);
+            return Ok(response.Recipes);
         }
         ///<summary>
         ///Add new recipe 
