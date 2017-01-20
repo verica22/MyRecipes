@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 
-//todo
-//add notnull check
 namespace ItLabs.MyRecipes.Core.Validations
 {
     public class IngredientValidator : AbstractValidator<Ingredient>

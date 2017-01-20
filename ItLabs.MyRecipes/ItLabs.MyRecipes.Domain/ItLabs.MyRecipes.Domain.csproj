@@ -119,7 +119,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validations\IngredientValidator.cs" />
     <Compile Include="Validations\RecipeValidator.cs" />
-    <Compile Include="Validations\SearchValidator.cs" />
+    <Compile Include="Validations\SearchRequestValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ItLabs.MyRecipes.Core\ItLabs.MyRecipes.Core.csproj">

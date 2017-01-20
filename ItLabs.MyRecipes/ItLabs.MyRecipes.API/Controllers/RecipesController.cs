@@ -27,10 +27,9 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///</description>
         [HttpGet, Route("Recipes")]
         [ActionName("Search")]
-        public IHttpActionResult Search([FromUri]SearchRequest search)
+        public IHttpActionResult Search([FromUri]SearchRequest searchRequest)
         {
-            var response = _recipeManager.SearchRecipes(search);
-           // var response = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue? page.Value : 1,pageSize.HasValue? pageSize.Value: Constants.DefaultPageSize);
+            var response = _recipeManager.SearchRecipes(searchRequest);
             if (!response.IsSuccessful || response.Errors.Count > 0)
             {
                 var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");

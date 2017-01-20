@@ -3,9 +3,9 @@ using ItLabs.MyRecipes.Core.Requests;
 
 namespace ItLabs.MyRecipes.Domain.Validations
 {
-    class SearchValidator : AbstractValidator<SearchRequest>
+    class SearchRequestValidator : AbstractValidator<SearchRequest>
     {
-        public SearchValidator()
+        public SearchRequestValidator()
         {
             RuleFor(x => x.Name)
                .Length(1, 50)
@@ -13,11 +13,11 @@ namespace ItLabs.MyRecipes.Domain.Validations
                .Matches("^[a-zA-Z ']*$")
                .WithMessage("Recipe Name must contain characters and spaces only");
 
-            RuleFor(x => x.page)
+            RuleFor(x => x.Page)
                 .InclusiveBetween(1, 20)
                 .WithMessage("Alowed pages between 1 and 20");
 
-            RuleFor(x => x.pageSize)
+            RuleFor(x => x.PageSize)
                .InclusiveBetween(1, 10)
                .WithMessage("Page size is alowed between 1 and 10");
 
