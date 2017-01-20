@@ -30,7 +30,7 @@ namespace ItLabs.MyRecipes.API.Controllers
         public IHttpActionResult Search([FromUri]SearchRequest search)
         {
             var response = _recipeManager.SearchRecipes(search);
-            //var recipes = _recipeManager.SearchRecipes((name, isDone, isFavourite, page.HasValue? page.Value : 1,pageSize.HasValue? pageSize.Value: Constants.DefaultPageSize);
+           // var response = _recipeManager.SearchRecipes(name, isDone, isFavourite, page.HasValue? page.Value : 1,pageSize.HasValue? pageSize.Value: Constants.DefaultPageSize);
             if (!response.IsSuccessful || response.Errors.Count > 0)
             {
                 var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
@@ -73,12 +73,12 @@ namespace ItLabs.MyRecipes.API.Controllers
         public IHttpActionResult Put(string name, [FromBody]RecipeRequest recipe)
         {
             var response = _recipeManager.Update(name,recipe);
-            if (!response.IsSuccessful )
+            if (!response.IsSuccessful || response.Recipe == null)
             {
                 var errorMessage = response.Errors.Aggregate((x, y) => $"{x} {y}");
                 return BadRequest(errorMessage);
             }
-            return Ok(recipe);
+            return Ok(response.Recipe);
        }
         ///<summary>
         ///Delete recipe 

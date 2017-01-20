@@ -13,7 +13,7 @@ namespace ItLabs.MyRecipes.Core
         
         SearchResponse SearchRecipes(SearchRequest search);
         RecipeResponse Create(RecipeRequest recipe);
-        ResponseBase Update(string name,RecipeRequest recipe);
+        RecipeResponse Update(string name, RecipeRequest recipe);
         void Remove(string name);
         
         IEnumerable<Ingredient> GetIngredients();

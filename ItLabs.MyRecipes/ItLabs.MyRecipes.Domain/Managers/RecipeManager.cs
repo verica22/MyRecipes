@@ -8,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using ItLabs.MyRecipes.Core.Requests;
 using System;
 using ItLabs.MyRecipes.Domain.Validations;
+using PagedList;
 
 namespace ItLabs.MyRecipes.Core.Managers
 {
@@ -44,30 +45,37 @@ namespace ItLabs.MyRecipes.Core.Managers
         public SearchResponse SearchRecipes(SearchRequest search)
          {
             var response = new SearchResponse();
-            var validationResult = new SearchValidator().Validate(search);
-            if (!validationResult.IsValid)
+            if (search != null)
             {
-                response.IsSuccessful = false;
-                response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                           return response;
+                var validationResult = new SearchValidator().Validate(search);
+                if (!validationResult.IsValid)
+                {
+                    response.IsSuccessful = false;
+                    response.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                    return response;
+                }
+
+                var dbRecipes = _recipeRepository.GetRecipes();
+
+                if (!string.IsNullOrEmpty(search.Name))
+                    dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(search.Name.ToLower()));
+
+                if (search.IsDone)
+                    dbRecipes = dbRecipes.Where(x => x.IsDone);
+
+                if (search.IsFavorite)
+                    dbRecipes = dbRecipes.Where(x => x.IsFavorite);
+
+                var recipes = dbRecipes.ProjectTo<Recipe>();
+                response.Recipes = recipes;
             }
-
-            var dbRecipes = _recipeRepository.GetRecipes();
-
-            if (!string.IsNullOrEmpty(search.Name))
-                dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(search.Name.ToLower()));
-
-            if (search.IsDone)
-                dbRecipes = dbRecipes.Where(x => x.IsDone);
-
-            if (search.IsFavorite)
-                dbRecipes = dbRecipes.Where(x => x.IsFavorite);
-
-            var recipes = dbRecipes.ProjectTo<Recipe>();
-            
-            response.Recipes = recipes;
-
-           // return recipes.OrderBy(x => x.Name).ToPagedList(search.page, search.pageSize);
+            else
+            {
+                var dbRecipes = _recipeRepository.GetRecipes();
+                var recipes = dbRecipes.ProjectTo<Recipe>();
+                response.Recipes = recipes;
+            }
+            // return recipes.OrderBy(x => x.Name).ToPagedList(search.page, search.pageSize);
             return response;
         }
 
@@ -107,9 +115,9 @@ namespace ItLabs.MyRecipes.Core.Managers
             response.Recipe = Mapper.Map<Recipe>(_recipeRepository.Save(dataRecipe));
             return response;
         }
-        public ResponseBase Update(string name,RecipeRequest recipe)
+        public RecipeResponse Update(string name,RecipeRequest recipe)
         {
-            var response = new ResponseBase();
+            var response = new RecipeResponse();
 
             var validator = new RecipeValidator();
             var dbrecipe = Mapper.Map<Recipe>(recipe);
@@ -123,16 +131,22 @@ namespace ItLabs.MyRecipes.Core.Managers
             }
 
             Data.Recipe dataRecipe = _recipeRepository.GetRecipeByName(name);
+            if (dataRecipe != null)
+            {
                 dataRecipe.Name = recipe.Name;
                 dataRecipe.Description = recipe.Description;
                 dataRecipe.IsDone = recipe.IsDone;
                 dataRecipe.IsFavorite = recipe.IsFavorite;
                 dataRecipe.DateModified = DateTime.Now;
-
                 AddIngredients(dataRecipe, recipe, isNewRecipe: false);
                 _recipeRepository.Save(dataRecipe);
-            
-           
+            }
+            else
+            {
+                //response.IsSuccessful = false;
+                response.Errors.Add("This recipe does not exist");
+            }
+            response.Recipe = Mapper.Map<Recipe>(dataRecipe);
             return response;
         }
 
