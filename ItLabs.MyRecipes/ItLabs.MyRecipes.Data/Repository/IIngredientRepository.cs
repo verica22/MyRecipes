@@ -8,11 +8,8 @@ namespace ItLabs.MyRecipes.Data.Repository
         IEnumerable<Ingredient> GetIngredients();
         Ingredient GetIngredient(string name);
         void Save(Ingredient ingredient);
-        void Remove(string name);
-        // void Remove(int id);
-        IQueryable<RecipeIngredients> GetRecipeIngredients();
-
-        //RecipeIngredients GetRecipeIngredient(int id);
+        void Remove(int id);
+        IQueryable<RecipeIngredients> GetRecipeIngredient(int id);
 
 
     }

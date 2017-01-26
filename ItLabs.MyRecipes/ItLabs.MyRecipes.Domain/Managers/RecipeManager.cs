@@ -73,7 +73,7 @@ namespace ItLabs.MyRecipes.Core.Managers
             return response;
         }
 
-          public RecipeResponse Create(RecipeRequest recipe)
+        public RecipeResponse Create(RecipeRequest recipe)
         {
             var response = new RecipeResponse();
 
@@ -142,17 +142,8 @@ namespace ItLabs.MyRecipes.Core.Managers
             dataRecipe.IsFavorite = recipe.IsFavorite;
             dataRecipe.DateModified = DateTime.Now;
 
-            // var dbRecipeIngredients = _ingredientRepository.GetRecipeIngredients();
-            //if (dataRecipe.Id !=0)
-            //    dbRecipeIngredients = dbRecipeIngredients.Where(x => x.RecipeId.Equals(dataRecipe.Id));
-
-            // foreach (var recipeIngredient in dbRecipeIngredients)
-            //foreach (var recipeIngredient in dataRecipe.RecipeIngredients)
-            //{
-            //    _ingredientRepository.Remove(recipeIngredient.Ingredient.Name);
-            //   //_ingredientRepository.Remove(recipeIngredient.RecipeId);
-            //}
-
+            _ingredientRepository.Remove(dataRecipe.Id);
+            
             AddIngredients(dataRecipe, recipe, isNewRecipe: false);
             _recipeRepository.Save(dataRecipe);
 

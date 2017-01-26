@@ -14,7 +14,7 @@ namespace ItLabs.MyRecipes.API
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-            GlobalConfiguration.Configuration 
+            GlobalConfiguration.Configuration
                 .EnableSwagger(c =>
                     {
                         // By default, the service root url is inferred from the request used to access the docs.
@@ -33,7 +33,7 @@ namespace ItLabs.MyRecipes.API
                         // hold additional metadata for an API. Version and title are required but you can also provide
                         // additional fields by chaining methods off SingleApiVersion.
                         //
-                         c.SingleApiVersion("v1", "MyRecipes- API" );
+                        c.SingleApiVersion("v1", "MyRecipes- API");
                         //c.SingleApiVersion(new Info
                         //{
                         //    version = "v1",

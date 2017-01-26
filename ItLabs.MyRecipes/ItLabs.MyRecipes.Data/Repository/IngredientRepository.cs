@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -39,43 +38,27 @@ namespace ItLabs.MyRecipes.Data.Repository
 
             _dbContext.SaveChanges();
         }
-        public void Remove(string name)
+        public IQueryable<RecipeIngredients> GetRecipeIngredient(int id)
         {
-            if (string.IsNullOrEmpty(name))
+            var recipeIngredients = _dbContext.RecipeIngredients.Where(x => x.RecipeId == id);
+            return recipeIngredients;
+        }
+        public void Remove(int id)
+        {
+            if (id == 0)
                 return;
 
-            var ingredient = GetIngredient(name);
+            var recipeIngredient = GetRecipeIngredient(id);
 
-            if (ingredient == null)
+            if (recipeIngredient == null)
                 return;
+            foreach (var ingredient in recipeIngredient.ToList())
+            {
+                _dbContext.RecipeIngredients.Remove(ingredient);
+                _dbContext.SaveChanges();
 
-            _dbContext.Ingredients.Remove(ingredient);
-            _dbContext.SaveChanges();
+            }
         }
-        //public void Remove(int id)
-        //{
-        //    if (id==0)
-        //        return;
-
-        //    var recipeIngredient = GetRecipeIngredient(id);
-
-        //    if (recipeIngredient == null)
-        //        return;
-
-        //    _dbContext.RecipeIngredients.Remove(recipeIngredient);
-        //    _dbContext.SaveChanges();
-        //}
-        public IQueryable<RecipeIngredients> GetRecipeIngredients()
-        {
-            return _dbContext.RecipeIngredients;
-        }
-        //public RecipeIngredients GetRecipeIngredient(int id)
-        //{
-        //    var recipeIngredients = _dbContext.RecipeIngredients.SingleOrDefault(x => x.RecipeId == id);
-        //    return recipeIngredients;
-        //}
-
-
-
+       
     }
 }
