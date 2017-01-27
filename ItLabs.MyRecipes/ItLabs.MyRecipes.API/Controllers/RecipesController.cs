@@ -2,10 +2,11 @@
 using ItLabs.MyRecipes.Core.Requests;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace ItLabs.MyRecipes.API.Controllers
 {
-    // [Route("recipes")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RecipesController : ApiController
     {
         public IRecipeManager _recipeManager { get; set; }

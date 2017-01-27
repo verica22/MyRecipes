@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Autofac.Integration.WebApi;
-using ItLabs.MyRecipes.Core.DependencyInjection;
+﻿using ItLabs.MyRecipes.Core.DependencyInjection;
 using System.Reflection;
 using System.Web.Http;
 
@@ -10,6 +8,9 @@ namespace ItLabs.MyRecipes.API
     {
         public static void Register(HttpConfiguration config)
         {
+
+            config.EnableCors();
+
             // Web API configuration and services
 
             // Web API routes
