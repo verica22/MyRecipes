@@ -39,6 +39,24 @@ namespace ItLabs.MyRecipes.API.Controllers
             return Ok(response.Recipes);
         }
         ///<summary>
+        ///Get recipe
+        ///</summary>
+        ///<remarks>
+        ///Get recipe
+        ///</remarks>
+        ///<returns></returns>
+        ///<response code="200">successful operation</response>
+        ///<response code="400">Ingredient was not found</response>
+        [HttpGet, Route("Recipes/{name}")]
+        [ActionName("GetRecipeNames")]
+        public IHttpActionResult GetRecipeNames(string name)
+        {
+            var response = _recipeManager.SearchRecipeByName(name);
+            if (response == null)
+                return BadRequest("This recipe was not found");
+            return Ok(response);
+        }
+        ///<summary>
         ///Add new recipe 
         ///</summary>
         ///<remarks>
@@ -70,7 +88,8 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///<response code="400">If the recipe is null</response>
         [HttpPut, Route("Recipes")]
         [ActionName("Post")]
-        public IHttpActionResult Put(string name, [FromBody]RecipeRequest recipe)
+        //public IHttpActionResult Put(string name, [FromBody]RecipeRequest recipe)
+        public IHttpActionResult Put(string name, [FromBody] RecipeRequest recipe)
         {
             var response = _recipeManager.Update(name,recipe);
             if (!response.IsSuccessful || response.Recipe == null)

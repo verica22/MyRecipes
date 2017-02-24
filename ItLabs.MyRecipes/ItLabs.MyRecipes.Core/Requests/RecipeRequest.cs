@@ -6,7 +6,7 @@ namespace ItLabs.MyRecipes.Core.Requests
     {
         public RecipeRequest()
         {
-            Ingredients = new List<IngredientRequest>();
+            RecipeIngredients = new List<RecipeIngredientsRequest>();
         }
 
         public string Name { get; set; }
@@ -14,6 +14,6 @@ namespace ItLabs.MyRecipes.Core.Requests
         public bool IsDone { get; set; }
         public bool IsFavorite { get; set; }
         
-        public virtual IEnumerable<IngredientRequest> Ingredients { get; set; }
+        public virtual IEnumerable<RecipeIngredientsRequest> RecipeIngredients { get; set; }
     }
 }

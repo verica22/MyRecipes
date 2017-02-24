@@ -40,7 +40,14 @@ namespace ItLabs.MyRecipes.Core.Managers
             var recipes = dbRecipes.ProjectTo<Recipe>();
             return recipes;
         }
+        public IEnumerable<Recipe> SearchRecipeByName(string term)
+        {
+            var dbRecipes = _recipeRepository.GetRecipes();
+            dbRecipes = dbRecipes.Where(x => x.Name.ToLower().StartsWith(term.ToLower()));
 
+            var recipes = Mapper.Map<IEnumerable<Recipe>>(dbRecipes);
+            return recipes;
+        }
         public SearchResponse SearchRecipes(SearchRequest searchRequest)
         {
             var response = new SearchResponse();
@@ -153,14 +160,14 @@ namespace ItLabs.MyRecipes.Core.Managers
 
         public void AddIngredients(Data.Recipe dataRecipe, RecipeRequest recipe, bool isNewRecipe)
         {
-            foreach (var recipeIngredient in recipe.Ingredients)
+            foreach (var recipeIngredient in recipe.RecipeIngredients)
             {
-                var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.Name);
+                var dataIngredient = _ingredientRepository.GetIngredient(recipeIngredient.IngredientName);
                 if (dataIngredient == null)
                 {
                     dataIngredient = new Data.Ingredient()
                     {
-                        Name = recipeIngredient.Name,
+                        Name = recipeIngredient.IngredientName,
                         Measurement = recipeIngredient.Measurement.ToString(),
                         DateCreated = DateTime.Now,
 

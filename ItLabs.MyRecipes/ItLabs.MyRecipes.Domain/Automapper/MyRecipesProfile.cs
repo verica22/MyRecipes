@@ -29,7 +29,7 @@ namespace ItLabs.MyRecipes.Core.Automapper
 
             CreateMap<Requests.RecipeRequest, Recipe>()
                  .ReverseMap();
-            CreateMap<Requests.IngredientRequest, Ingredient>()
+            CreateMap<Requests.RecipeIngredientsRequest, Ingredient>()
                  .ReverseMap();
 
             CreateMap<Recipe,Requests.SearchRequest>()

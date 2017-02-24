@@ -2,9 +2,9 @@
 
 namespace ItLabs.MyRecipes.Core.Requests
 {
-   public class IngredientRequest
+   public class RecipeIngredientsRequest
     {
-        public string Name { get; set; }
+        public string IngredientName { get; set; }
         public Measurement Measurement { get; set; }
 
         public int Quantity { get; set; }

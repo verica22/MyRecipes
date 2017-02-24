@@ -46,7 +46,7 @@
     <Compile Include="Contracts\RecipeIngredient.cs" />
     <Compile Include="Enums\Measurement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\IngredientRequest.cs" />
+    <Compile Include="Requests\RecipeIngredientsRequest.cs" />
     <Compile Include="Requests\RecipeRequest.cs" />
     <Compile Include="Requests\SearchRequest.cs" />
     <Compile Include="Responses\RecipeResponse.cs" />
