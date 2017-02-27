@@ -170,6 +170,7 @@ namespace ItLabs.MyRecipes.Core.Managers
                         Name = recipeIngredient.IngredientName,
                         Measurement = recipeIngredient.Measurement.ToString(),
                         DateCreated = DateTime.Now,
+                        DateModified = DateTime.Now,
 
                     };
                 }
