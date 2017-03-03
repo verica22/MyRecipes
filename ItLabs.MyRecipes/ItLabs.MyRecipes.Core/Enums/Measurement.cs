@@ -2,14 +2,16 @@
 {
     public enum Measurement
     {
-        Spoon = 1,
-        Teaspoon = 2,
-        Dessertspoon = 3,
-        Cup = 4,
-        Gallon = 5,
-        Litre = 6,
-        Kg = 7,
-        ML = 8,
-        Number = 9
+        Kg = 1,
+        g = 2,
+        l = 3,
+        Number = 4,
+        Spoon = 5,
+        Teaspoon = 6,
+        Dessertspoon = 7,
+        Gallon = 8,
+        Cup = 9,
+        Dash = 10,
+        Package = 11
     }
 }
