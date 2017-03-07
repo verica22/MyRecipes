@@ -23,11 +23,7 @@ namespace ItLabs.MyRecipes.Core.Validations
                 .Length(10, 1000)
                 .WithMessage("Recipe Description must be between 10 and 1000 characters");
 
-            //RuleFor(x => x.Ingredients)
-            //    .NotNull()
-            //    .NotEmpty()
-            //    .WithMessage("Please add ingredients");
-        }
+         }
 
 
     }

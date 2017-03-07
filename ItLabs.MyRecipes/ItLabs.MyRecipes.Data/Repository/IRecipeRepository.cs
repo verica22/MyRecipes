@@ -8,7 +8,6 @@ namespace ItLabs.MyRecipes.Data.Repository
         IQueryable<Recipe> GetRecipes();
         Recipe GetRecipeByName(string name);
         Recipe GetRecipeById(int id);
-        //IEnumerable<Recipe> SearchRecipe();
         Recipe Save(Recipe recipe);
         void Remove(string name);
             
