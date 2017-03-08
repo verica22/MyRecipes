@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ItLabs.MyRecipes.UnitTests</RootNamespace>
     <AssemblyName>ItLabs.MyRecipes.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,8 +92,12 @@
       <Project>{e48def98-97f5-443c-8991-92cbaf3aa429}</Project>
       <Name>ItLabs.MyRecipes.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ItLabs.MyRecipes.Data\ItLabs.MyRecipes.Data.csproj">
+      <Project>{3679eb4b-aeb3-4d32-bc12-967a16e0bac1}</Project>
+      <Name>ItLabs.MyRecipes.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ItLabs.MyRecipes.Domain\ItLabs.MyRecipes.Domain.csproj">
-      <Project>{96F6B9A4-A33C-4C56-A473-A6132AF6976E}</Project>
+      <Project>{96f6b9a4-a33c-4c56-a473-a6132af6976e}</Project>
       <Name>ItLabs.MyRecipes.Domain</Name>
     </ProjectReference>
   </ItemGroup>

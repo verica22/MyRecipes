@@ -8,8 +8,6 @@ namespace ItLabs.MyRecipes.Domain.Validations
         public SearchRequestValidator()
         {
             RuleFor(x => x.Name)
-               .Length(1, 50)
-               .WithMessage("Recipe Name must be at least 4 characters")
                .Matches("^[a-zA-Z ']*$")
                .WithMessage("Recipe Name must contain characters and spaces only");
 

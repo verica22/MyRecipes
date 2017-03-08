@@ -87,7 +87,7 @@ namespace ItLabs.MyRecipes.API.Controllers
         ///<response code="200">Returns updated recipe</response>
         ///<response code="400">If the recipe is null</response>
         [HttpPut, Route("Recipes")]
-        [ActionName("Post")]
+        [ActionName("Put")]
          public IHttpActionResult Put(string name, [FromBody] RecipeRequest recipe)
         {
             var response = _recipeManager.Update(name,recipe);

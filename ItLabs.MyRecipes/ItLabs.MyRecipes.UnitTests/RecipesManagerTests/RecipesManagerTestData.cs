@@ -1,74 +1,226 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ItLabs.MyRecipes.Core.Automapper;
+using ItLabs.MyRecipes.Core.Managers;
+using ItLabs.MyRecipes.Core.Requests;
+using ItLabs.MyRecipes.Core.Responses;
+using ItLabs.MyRecipes.Data.Repository;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.ComponentModel;
+using System.Linq;
 
 namespace ItLabs.MyRecipes.UnitTests.RecipesManagerTests
 {
     [TestClass]
-   public  class RecipesManagerTestData
+    public class RecipesManagerTestData
     {
-        //  Mock<IContainer> mockContainer = new Mock<IContainer>();
-        //MockContext = new Mock<IContext>();
-        //        MockRepository = new Mock<GiAdminRepository>(MockContext.Object);
-        //        return MockRepository.Object;
-        //Mock<ICustomerView> mockView = new Mock<ICustomerView>();
-        //ICustomerView view = mockView.Object;
+        Mock<IRecipeRepository> _mockRecipeRepository;
+        Mock<IIngredientRepository> _mockIngredientRepository;
+        RecipeManager _recipeManager;
 
-        //[SetUp]
-        //public void Initialize()
-        //{
-        //    _mockRepository = MockRepository.GenerateMock<IRepository>();
+        [TestInitialize]
+        public void Initialize()
+        {
+            AutomapperBootstrap.Initialize();
 
-        //    _campusManagementService = new CampusManagementService(_mockRepository);
-        //}
-        //Mock<ICustomerView> mockView = new Mock<ICustomerView>();
-        //ICustomerView view = mockView.Object;
+            _mockRecipeRepository = new Mock<IRecipeRepository>();
+            _mockIngredientRepository = new Mock<IIngredientRepository>();
+
+            _recipeManager = new RecipeManager(_mockRecipeRepository.Object, _mockIngredientRepository.Object);
+        }
 
 
-        //[TestMethod]
-        //public void SearchRecipes_ShouldReturnAllRecipes()
-        //{
+        [TestMethod]
+        public void SearchRecipes_ShouldReturnAllRecipes()
+        {
+            #region Arrange
+
+            var searchRequest = new SearchRequest
+            {
+                Name = "",
+                IsDone = false,
+                IsFavorite = false,
+                Page = 1,
+                PageSize = 5
+            };
+
+            var excectedResponse = new SearchResponse()
+            {
+                Recipes = RecipeTestData.GetRecipes()
+            };
+
+            _mockRecipeRepository.Setup(x => x.GetRecipes())
+                .Returns(RecipeTestData.GetDataRecipes());
 
 
-        //    SearchRequest search = new SearchRequest();
-        //    PrivateObject obj = new PrivateObject(typeof(RecipeManager));
+            #endregion
 
-        //   // arange
-        //    var tokenResponseActual = RecipeManager.Authenticate(searchRequest);
+            #region Act
 
-        //   // act
-        //    var tokenResponse = RecipeManager.Refresh(tokenResponseActual.Token, expirationSeconds);
+            var actualResponse = _recipeManager.SearchRecipes(searchRequest);
 
-        //    Assert
-        //    Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsNotNull(tokenResponse);
-        //    Microsoft.VisualStudio.TestTools.UnitTesting.Assert.IsNotNull(tokenResponse.Payload);
-        //}
-        // [TestMethod]
-        // public void GetRecipe_ShouldReturnCorrectRecipes()
-        // {
-        //var testRecipes= GetTestRecipes();
-        //var controller = new RecipesController(testRecipes);
+            #endregion
 
-        //var result = controller.GetRecipeNames("Recipe4") as OkNegotiatedContentResult<Recipe>;
+            #region Assert
+            Assert.IsTrue(actualResponse.IsSuccessful);
+            Assert.AreEqual(excectedResponse.Recipes.Count(), actualResponse.Recipes.Count());
+            
+            int i = 0;
+            foreach (var expectedRecipe in excectedResponse.Recipes)
+            {
+                Assert.AreEqual(expectedRecipe.Name, actualResponse.Recipes.ElementAt(i).Name);
+                Assert.AreEqual(expectedRecipe.Description, actualResponse.Recipes.ElementAt(i).Description);
+                Assert.AreEqual(expectedRecipe.IsDone, actualResponse.Recipes.ElementAt(i).IsDone);
+                Assert.AreEqual(expectedRecipe.IsFavorite, actualResponse.Recipes.ElementAt(i).IsFavorite);
+                i++;
+            }
+            #endregion
+        }
 
-        //Assert.IsNotNull(result);
-        //Assert.AreEqual(testRecipes[4].Name, result.Content.Name);
-        // }
-        //[TestMethod]
-        //public void GetRecipe_ShouldNotFindRecipe()
-        //{
-        //    //var controller = new RecipesController(GetTestRecipes());
+        [TestMethod]
+        public void SearchRecipes_ShouldReturnRecipe()
+        {
+            #region Arrange
 
-        //    //var result = controller.GetRecipeNames("Recipe5");
-        //    //Assert.IsInstanceOfType(result, typeof(NotFoundResult));
-        //}
+            var searchRequest = new SearchRequest
+            {
+                Name = "Chocolate Gravy",
+                IsDone = false,
+                IsFavorite = false,
+                Page = 1,
+                PageSize = 5
+            };
 
-       
+            var excectedResponse = new SearchResponse()
+            {
+                Recipes = RecipeTestData.GetRecipe()
+
+            };
+
+            _mockRecipeRepository.Setup(x => x.GetRecipes())
+                .Returns(RecipeTestData.GetDataRecipes());
+
+
+            #endregion
+
+            #region Act
+
+            var actualResponse = _recipeManager.SearchRecipes(searchRequest);
+
+            #endregion
+
+            #region Assert
+            Assert.IsTrue(actualResponse.IsSuccessful);
+            Assert.AreEqual(excectedResponse.Recipes.Count(), actualResponse.Recipes.Count());
+            int i = 0;
+            foreach (var expectedRecipe in excectedResponse.Recipes)
+            {
+                Assert.AreEqual(expectedRecipe.Name, actualResponse.Recipes.ElementAt(i).Name);
+                Assert.AreEqual(expectedRecipe.Description, actualResponse.Recipes.ElementAt(i).Description);
+                Assert.AreEqual(expectedRecipe.IsDone, actualResponse.Recipes.ElementAt(i).IsDone);
+                Assert.AreEqual(expectedRecipe.IsFavorite, actualResponse.Recipes.ElementAt(i).IsFavorite);
+                i++;
+            }
+
+            #endregion
+        }
+
+
+        [TestMethod]
+        public void SearchRecipes_ShouldReturnDoneRecipe()
+        {
+            #region Arrange
+
+            var searchRequest = new SearchRequest
+            {
+                Name = "Recipe",
+                IsDone = true,
+                IsFavorite = false,
+                Page = 1,
+                PageSize = 5
+            };
+
+            var excectedResponse = new SearchResponse()
+            {
+                Recipes = RecipeTestData.GetDoneRecipe()
+
+            };
+
+            _mockRecipeRepository.Setup(x => x.GetRecipes())
+                .Returns(RecipeTestData.GetDataRecipes());
+
+
+            #endregion
+
+            #region Act
+
+            var actualResponse = _recipeManager.SearchRecipes(searchRequest);
+
+            #endregion
+
+            #region Assert
+            Assert.IsTrue(actualResponse.IsSuccessful);
+            Assert.AreEqual(excectedResponse.Recipes.Count(), actualResponse.Recipes.Count());
+            int i = 0;
+            foreach (var expectedRecipe in excectedResponse.Recipes)
+            {
+                Assert.AreEqual(expectedRecipe.Name, actualResponse.Recipes.ElementAt(i).Name);
+                Assert.AreEqual(expectedRecipe.Description, actualResponse.Recipes.ElementAt(i).Description);
+                Assert.AreEqual(expectedRecipe.IsDone, actualResponse.Recipes.ElementAt(i).IsDone);
+                Assert.AreEqual(expectedRecipe.IsFavorite, actualResponse.Recipes.ElementAt(i).IsFavorite);
+                i++;
+            }
+
+            #endregion
+        }
+        [TestMethod]
+        public void SearchRecipes_ShouldReturnError()
+        {
+            #region Arrange
+
+            var searchRequest = new SearchRequest
+            {
+                Name = "Chocolate Gravy 2",
+                IsDone = false,
+                IsFavorite = false,
+                Page = 1,
+                PageSize = 5
+            };
+
+            var excectedResponse = new SearchResponse()
+            {
+               Errors = new System.Collections.Generic.List<string>
+               {
+                   "Recipe Name must contain characters and spaces only"
+               }
+
+            };
+
+            #endregion
+
+            #region Act
+
+            var actualResponse = _recipeManager.SearchRecipes(searchRequest);
+
+            #endregion
+
+            #region Assert
+            Assert.IsFalse(actualResponse.IsSuccessful);
+            Assert.AreEqual(excectedResponse.Errors.Count(), actualResponse.Errors.Count());
+            int i = 0;
+            foreach (var expectedError in excectedResponse.Errors)
+            {
+                Assert.AreEqual(expectedError, actualResponse.Errors.ElementAt(i));
+                i++;
+            }
+
+            #endregion
+        }
+
+
 
     }
 
 
 }
-  
-   
+
+
 

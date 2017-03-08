@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItLabs.MyRecipes.UI", "ItLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItLabs.MyRecipes.UnitTests", "ItLabs.MyRecipes.UnitTests\ItLabs.MyRecipes.UnitTests.csproj", "{0018F4BC-5FE0-4098-BBEA-4E141A82A879}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItLabs.MyRecipes.Domain.Tests", "ItLabs.MyRecipes.Domain.Tests01\ItLabs.MyRecipes.Domain.Tests.csproj", "{70FBAA62-6F74-4C2C-8C71-2D4D8180D2EE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{0018F4BC-5FE0-4098-BBEA-4E141A82A879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0018F4BC-5FE0-4098-BBEA-4E141A82A879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0018F4BC-5FE0-4098-BBEA-4E141A82A879}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70FBAA62-6F74-4C2C-8C71-2D4D8180D2EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70FBAA62-6F74-4C2C-8C71-2D4D8180D2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70FBAA62-6F74-4C2C-8C71-2D4D8180D2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70FBAA62-6F74-4C2C-8C71-2D4D8180D2EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
